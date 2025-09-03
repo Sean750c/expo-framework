@@ -54,6 +54,7 @@ export const APP_CONFIG = {
 // Storage Keys
 export const STORAGE_KEYS = {
   AUTH_TOKEN: '@auth_token',
+  REFRESH_TOKEN: '@refresh_token',
   USER_DATA: '@user_data',
   THEME: '@theme',
   ONBOARDING_COMPLETE: '@onboarding_complete',

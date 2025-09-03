@@ -22,6 +22,12 @@ export interface ApiError {
   code?: string;
 }
 
+// Extend AxiosRequestConfig to include retry flag
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    _retry?: boolean;
+  }
+}
 export interface ThemeColors {
   primary: string;
   secondary: string;
