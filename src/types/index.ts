@@ -76,3 +76,10 @@ export interface AppState {
   isOnline: boolean;
   appState: 'active' | 'background' | 'inactive';
 }
+
+// Device and API types
+export interface DeviceInfo {
+  os_type: string;
+  device_no: string;
+  device_type: string;
+}

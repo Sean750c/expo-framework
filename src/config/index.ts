@@ -3,27 +3,39 @@ import * as Updates from 'expo-updates';
 
 export interface AppConfig {
   API_BASE_URL: string;
+  APP_ID: string;
+  APP_VERSION: string;
+  APP_KEY: string;
   ENVIRONMENT: 'development' | 'staging' | 'production';
   ENABLE_LOGGING: boolean;
   ENABLE_REMOTE_LOGGING: boolean;
 }
 
 const developmentConfig: AppConfig = {
-  API_BASE_URL: 'https://api-dev.example.com',
+  API_BASE_URL: 'https://test-giftcard8-api.gcard8.com',
+  APP_ID: 'android-cardking-v1',
+  APP_VERSION: '1.0.0',
+  APP_KEY: 'your_app_key_here', // Replace with actual app key
   ENVIRONMENT: 'development',
   ENABLE_LOGGING: true,
   ENABLE_REMOTE_LOGGING: false,
 };
 
 const stagingConfig: AppConfig = {
-  API_BASE_URL: 'https://api-staging.example.com',
+  API_BASE_URL: 'https://test-giftcard8-api.gcard8.com',
+  APP_ID: 'android-cardking-v1',
+  APP_VERSION: '1.0.0',
+  APP_KEY: 'your_app_key_here', // Replace with actual app key
   ENVIRONMENT: 'staging',
   ENABLE_LOGGING: true,
   ENABLE_REMOTE_LOGGING: true,
 };
 
 const productionConfig: AppConfig = {
-  API_BASE_URL: 'https://api.example.com',
+  API_BASE_URL: 'https://test-giftcard8-api.gcard8.com',
+  APP_ID: 'android-cardking-v1',
+  APP_VERSION: '1.0.0',
+  APP_KEY: 'your_app_key_here', // Replace with actual app key
   ENVIRONMENT: 'production',
   ENABLE_LOGGING: false,
   ENABLE_REMOTE_LOGGING: true,

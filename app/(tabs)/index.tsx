@@ -5,6 +5,7 @@ import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
 import { useRequest } from '@/src/hooks/useRequest';
 import { apiClient } from '@/src/api/client';
+import { useAppConfig } from '@/src/hooks/useAppConfig';
 import { Button } from '@/src/components/common/Button';
 import { Loading } from '@/src/components/common/Loading';
 import { EmptyState } from '@/src/components/common/EmptyState';
@@ -33,6 +34,7 @@ const fetchHomeData = async () => {
 const HomeContent: React.FC = () => {
   const { theme } = useTheme();
   const { user } = useAuthStore();
+  const { appConfig, getContactInfo, getFeatureFlags } = useAppConfig();
   
   const {
     data: homeData,
@@ -75,9 +77,33 @@ const HomeContent: React.FC = () => {
             Hello, {user?.name || 'User'}!
           </Text>
           <Text style={[styles.welcomeMessage, { color: theme.colors.textSecondary }]}>
-            {homeData?.welcomeMessage}
+            {homeData?.welcomeMessage || 'Welcome to CardKing!'}
           </Text>
         </View>
+
+        {/* App Config Info */}
+        {appConfig && (
+          <View style={styles.configSection}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+              App Configuration
+            </Text>
+            
+            <View style={[styles.configCard, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.configItem, { color: theme.colors.text }]}>
+                Support Email: {getContactInfo().email}
+              </Text>
+              <Text style={[styles.configItem, { color: theme.colors.text }]}>
+                WhatsApp: {getContactInfo().whatsappEnable ? 'Enabled' : 'Disabled'}
+              </Text>
+              <Text style={[styles.configItem, { color: theme.colors.text }]}>
+                Google Login: {getFeatureFlags().googleLoginEnable ? 'Enabled' : 'Disabled'}
+              </Text>
+              <Text style={[styles.configItem, { color: theme.colors.text }]}>
+                Platform Fee: {appConfig.platform_fee}
+              </Text>
+            </View>
+          </View>
+        )}
 
         {/* Stats Cards */}
         <View style={styles.statsContainer}>
@@ -213,5 +239,17 @@ const styles = StyleSheet.create({
   actionSection: {
     paddingHorizontal: 20,
     paddingBottom: 24,
+  },
+  configSection: {
+    paddingHorizontal: 20,
+    marginBottom: 24,
+  },
+  configCard: {
+    padding: 16,
+    borderRadius: 12,
+  },
+  configItem: {
+    fontSize: 14,
+    marginBottom: 8,
   },
 });

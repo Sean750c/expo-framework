@@ -171,6 +171,15 @@ class ApiClient {
     const response = await this.client.patch<ApiResponse<T>>(url, data, config);
     return response.data.data;
   }
+
+  // Raw methods that return the full response (for APIs with different response structure)
+  async postRaw<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return await this.client.post<T>(url, data, config);
+  }
+
+  async getRaw<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return await this.client.get<T>(url, config);
+  }
 }
 
 export const apiClient = new ApiClient();

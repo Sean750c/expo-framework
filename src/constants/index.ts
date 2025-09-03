@@ -1,5 +1,8 @@
 // API Constants
 export const API_ENDPOINTS = {
+  APP: {
+    INIT: '/gc/public/appinit',
+  },
   AUTH: {
     LOGIN: '/auth/login',
     REGISTER: '/auth/register',
