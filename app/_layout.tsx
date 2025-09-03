@@ -16,7 +16,7 @@ export default function RootLayout() {
   return (
     <AppProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <Slot /> {/* 渲染子路由 */}
+        <Slot />
         <Toast />
         <StatusBar style={theme.colors.background === '#000000' ? 'light' : 'dark'} />
       </GestureHandlerRootView>
