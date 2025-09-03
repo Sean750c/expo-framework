@@ -66,6 +66,8 @@ class ApiClient {
         return response;
       },
       async (error) => {
+        const originalRequest = error.config;
+        
         logger.error('API Error:', error.response?.status, error.config?.url, error.message);
 
         if (error.response?.status === 401 && !originalRequest._retry) {
