@@ -222,6 +222,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ isLoading: false });
       throw error;
     }
+  }
   initializeAuth: async () => {
     try {
       set({ isLoading: true });
