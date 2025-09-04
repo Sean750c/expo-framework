@@ -118,7 +118,7 @@ export class SignatureUtils {
     const deviceInfo = await this.getDeviceInfo();
 
     // Merge base params with request params
-    const allParams = {
+    const allParams: Record<string, any> = {
       appid: appConfig.APP_ID,
       version: appConfig.APP_VERSION,
       os_type: deviceInfo.os_type,

@@ -6,6 +6,9 @@ import { logger } from '@/src/utils/logger';
 import { tokenManager } from '@/src/utils/tokenManager';
 import axios from 'axios';
 import config from '@/src/config';
+import { apiClient } from '@/src/api/client';
+import { ApiResponse } from '@/src/types';
+import { ERROR_MESSAGES } from '@/src/constants';
 
 interface AuthStore extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -204,7 +207,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ isLoading: true });
       
       // Import apiClient dynamically to avoid issues during initialization
-      const { apiClient } = await import('@/src/api/client');
       const updatedUser = await apiClient.put<User>(
         API_ENDPOINTS.AUTH.LOGIN,
         userData

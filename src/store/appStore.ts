@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { AppState } from '@/src/types';
 import { storage } from '@/src/utils/storage';
-import { AppService, AppInitResponse } from '@/src/api/appService';
+import { AppService } from '@/src/api/appService';
+import { AppInitResponse } from '@/src/types';
 import { logger } from '@/src/utils/logger';
 import { STORAGE_KEYS } from '@/src/constants';
 

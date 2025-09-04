@@ -4,6 +4,7 @@ import { storage } from '@/src/utils/storage';
 import { logger } from '@/src/utils/logger';
 import { STORAGE_KEYS, ERROR_MESSAGES } from '@/src/constants';
 import { ApiResponse, ApiError } from '@/src/types';
+import { useAuthStore } from '@/src/store/authStore';
 
 interface FailedRequest {
   resolve: (value: any) => void;
@@ -89,7 +90,6 @@ class ApiClient {
 
           try {
             // Import authStore dynamically to avoid circular dependency
-            const { useAuthStore } = await import('@/src/store/authStore');
             await useAuthStore.getState().refreshToken();
             
             // Get the new token
@@ -100,7 +100,7 @@ class ApiClient {
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
               
               // Process queued requests with new token
-              this.processQueue(null, newToken);
+              this.processQueue(null, newToken as string);
               
               // Retry the original request
               return this.client(originalRequest);
@@ -137,7 +137,6 @@ class ApiClient {
   private async handleUnauthorized() {
     try {
       // Import authStore dynamically to avoid circular dependency
-      const { useAuthStore } = await import('@/src/store/authStore');
       await useAuthStore.getState().logout();
     } catch (error) {
       logger.error('Error during logout:', error);

@@ -5,7 +5,7 @@ import { logger } from '@/src/utils/logger';
 
 export const useTokenRefresh = () => {
   const { isAuthenticated, refreshToken, logout } = useAuthStore();
-  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {

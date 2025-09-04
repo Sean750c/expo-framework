@@ -1,5 +1,4 @@
 import { useAppStore } from '@/src/store/appStore';
-import { AppInitResponse } from '@/src/api/appService';
 
 export const useAppConfig = () => {
   const { appConfig } = useAppStore();
