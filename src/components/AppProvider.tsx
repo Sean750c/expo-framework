@@ -5,7 +5,6 @@ import { useAppStore } from '@/src/store/appStore';
 import { useNetwork } from '@/src/hooks/useNetwork';
 import { useAppState } from '@/src/hooks/useAppState';
 import { useTheme } from '@/src/hooks/useTheme';
-import { useTokenRefresh } from '@/src/hooks/useTokenRefresh';
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const { initializeAuth } = useAuthStore();
@@ -16,7 +15,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // 初始化 hooks
   useNetwork();
   useAppState();
-  useTokenRefresh();
 
   useEffect(() => {
     const init = async () => {

@@ -6,15 +6,8 @@ import { STORAGE_KEYS, ERROR_MESSAGES } from '@/src/constants';
 import { ApiResponse, ApiError } from '@/src/types';
 import { useAuthStore } from '@/src/store/authStore';
 
-interface FailedRequest {
-  resolve: (value: any) => void;
-  reject: (error: any) => void;
-  config: AxiosRequestConfig;
-}
 class ApiClient {
   private client: AxiosInstance;
-  private isRefreshing = false;
-  private failedQueue: FailedRequest[] = [];
 
   constructor() {
     this.client = axios.create({
@@ -28,21 +21,6 @@ class ApiClient {
     this.setupInterceptors();
   }
 
-  private processQueue(error: ApiError | null, token: string | null = null) {
-    this.failedQueue.forEach(({ resolve, reject, config }) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (token) {
-          config.headers = config.headers || {};
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        resolve(this.client(config));
-      }
-    });
-    
-    this.failedQueue = [];
-  }
   private setupInterceptors() {
     // Request interceptor - Add auth token
     this.client.interceptors.request.use(
@@ -67,59 +45,13 @@ class ApiClient {
         return response;
       },
       async (error) => {
-        const originalRequest = error.config;
         
         logger.error('API Error:', error.response?.status, error.config?.url, error.message);
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          // Prevent refresh token endpoint from triggering refresh
-          if (originalRequest.url?.includes('/auth/refresh')) {
-            await this.handleUnauthorized();
-            return Promise.reject(this.createApiError(error));
-          }
-
-          if (this.isRefreshing) {
-            // If already refreshing, queue this request
-            return new Promise((resolve, reject) => {
-              this.failedQueue.push({ resolve, reject, config: originalRequest });
-            });
-          }
-
-          originalRequest._retry = true;
-          this.isRefreshing = true;
-
-          try {
-            // Import authStore dynamically to avoid circular dependency
-            await useAuthStore.getState().refreshToken();
-            
-            // Get the new token
-            const newToken = await storage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-            
-            if (newToken) {
-              // Update the original request with new token
-              originalRequest.headers.Authorization = `Bearer ${newToken}`;
-              
-              // Process queued requests with new token
-              this.processQueue(null, newToken as string);
-              
-              // Retry the original request
-              return this.client(originalRequest);
-            } else {
-              throw new Error('No token received after refresh');
-            }
-          } catch (refreshError) {
-            logger.error('Token refresh failed:', refreshError);
-            
-            // Process queued requests with error
-            this.processQueue(this.createApiError(refreshError), null);
-            
-            // Handle unauthorized (logout user)
-            await this.handleUnauthorized();
-            
-            return Promise.reject(this.createApiError(error));
-          } finally {
-            this.isRefreshing = false;
-          }
+        // Check if error message contains "Session expired"
+        const errorMessage = error.response?.data?.msg || error.response?.data?.message || '';
+        if (errorMessage.includes('Session expired') || error.response?.status === 401) {
+          await this.handleUnauthorized();
         }
 
         return Promise.reject(this.createApiError(error));
@@ -129,15 +61,17 @@ class ApiClient {
 
   private createApiError(error: any): ApiError {
     return {
-      message: error.response?.data?.message || ERROR_MESSAGES.GENERIC_ERROR,
+      message: error.response?.data?.msg || error.response?.data?.message || ERROR_MESSAGES.GENERIC_ERROR,
       status: error.response?.status || 0,
       code: error.response?.data?.code,
     };
   }
+
   private async handleUnauthorized() {
     try {
       // Import authStore dynamically to avoid circular dependency
-      await useAuthStore.getState().logout();
+      const authStore = useAuthStore.getState();
+      await authStore.logout();
     } catch (error) {
       logger.error('Error during logout:', error);
       // Fallback: clear storage manually

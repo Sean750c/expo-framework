@@ -18,18 +18,25 @@ export const nameSchema = yup
 
 // Form validation schemas
 export const loginSchema = yup.object({
-  email: emailSchema,
+  username: yup
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .required('Username is required'),
   password: passwordSchema,
 });
 
 export const registerSchema = yup.object({
-  name: nameSchema,
+  username: yup
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .required('Username is required'),
   email: emailSchema,
   password: passwordSchema,
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Please confirm your password'),
+  recommendCode: yup.string().optional(),
 });
 
 export const profileSchema = yup.object({

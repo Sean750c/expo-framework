@@ -1,24 +1,60 @@
 import { create } from 'zustand';
-import { AuthState, User } from '@/src/types';
+import { AuthState, User, LoginRequest, RegisterRequest, AuthResponse } from '@/src/types';
 import { storage } from '@/src/utils/storage';
-import { STORAGE_KEYS, API_ENDPOINTS } from '@/src/constants';
+import { STORAGE_KEYS } from '@/src/constants';
 import { logger } from '@/src/utils/logger';
-import { tokenManager } from '@/src/utils/tokenManager';
-import axios from 'axios';
-import config from '@/src/config';
-import { apiClient } from '@/src/api/client';
-import { ApiResponse } from '@/src/types';
-import { ERROR_MESSAGES } from '@/src/constants';
+import { AuthService } from '@/src/api/authService';
 
 interface AuthStore extends AuthState {
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
+  register: (params: RegisterRequest) => Promise<void>;
   logout: () => Promise<void>;
-  refreshToken: () => Promise<void>;
   updateProfile: (userData: Partial<User>) => Promise<void>;
   initializeAuth: () => Promise<void>;
   setLoading: (loading: boolean) => void;
 }
+
+// Helper function to convert AuthResponse to User
+const convertAuthResponseToUser = (authResponse: AuthResponse): User => {
+  return {
+    id: authResponse.user_id.toString(),
+    name: authResponse.nickname || authResponse.username,
+    email: authResponse.email,
+    role: 'user',
+    createdAt: new Date(authResponse.register_time * 1000).toISOString(),
+    updatedAt: new Date(authResponse.last_login_time * 1000).toISOString(),
+    user_id: authResponse.user_id,
+    token: authResponse.token,
+    country_id: authResponse.country_id,
+    channel_type: authResponse.channel_type,
+    avatar: authResponse.avatar,
+    username: authResponse.username,
+    nickname: authResponse.nickname,
+    vip_level: authResponse.vip_level,
+    money: authResponse.money,
+    rebate_money: authResponse.rebate_money,
+    usd_rebate_money: authResponse.usd_rebate_money,
+    country_name: authResponse.country_name,
+    currency_symbol: authResponse.currency_symbol,
+    currency_name: authResponse.currency_name,
+    withdrawal_method: authResponse.withdrawal_method,
+    money_detail: authResponse.money_detail,
+    country_logo_image: authResponse.country_logo_image,
+    phone: authResponse.phone,
+    is_email_bind: authResponse.is_email_bind,
+    whatsapp: authResponse.whatsapp,
+    google_bind: authResponse.google_bind,
+    facebook_bind: authResponse.facebook_bind,
+    apple_bind: authResponse.apple_bind,
+    whatsapp_bind: authResponse.whatsapp_bind,
+    password_null: authResponse.password_null,
+    t_password_null: authResponse.t_password_null,
+    register_time: authResponse.register_time,
+    last_login_time: authResponse.last_login_time,
+    point: authResponse.point,
+    coupon_num: authResponse.coupon_num,
+  };
+};
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
@@ -28,30 +64,20 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   setLoading: (loading: boolean) => set({ isLoading: loading }),
 
-  login: async (email: string, password: string) => {
+  login: async (username: string, password: string) => {
     try {
       set({ isLoading: true });
       
-      // Use direct axios call to avoid circular dependency
-      const response = await axios.post<ApiResponse<{ user: User; token: string; refreshToken?: string; expiresAt?: number }>>(
-        `${config().API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`,
-        { email, password }
-      );
-
-      const { user, token, refreshToken, expiresAt } = response.data.data;
-
-      // Store tokens using token manager
-      await tokenManager.setTokens({
-        accessToken: token,
-        refreshToken,
-        expiresAt,
-      });
+      const authResponse = await AuthService.login({ username, password });
+      const user = convertAuthResponseToUser(authResponse);
       
+      // Store token and user data
+      await storage.setItem(STORAGE_KEYS.AUTH_TOKEN, authResponse.token);
       await storage.setItem(STORAGE_KEYS.USER_DATA, user);
 
       set({
         user,
-        token,
+        token: authResponse.token,
         isAuthenticated: true,
         isLoading: false,
       });
@@ -59,39 +85,25 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       logger.info('User logged in successfully');
     } catch (error: any) {
       set({ isLoading: false });
-      const apiError = {
-        message: error.response?.data?.message || ERROR_MESSAGES.GENERIC_ERROR,
-        status: error.response?.status || 0,
-        code: error.response?.data?.code,
-      };
-      throw apiError;
+      logger.error('Login failed:', error);
+      throw error;
     }
   },
 
-  register: async (name: string, email: string, password: string) => {
+  register: async (params: RegisterRequest) => {
     try {
       set({ isLoading: true });
       
-      // Use direct axios call to avoid circular dependency
-      const response = await axios.post<ApiResponse<{ user: User; token: string; refreshToken?: string; expiresAt?: number }>>(
-        `${config().API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`,
-        { name, email, password }
-      );
-
-      const { user, token, refreshToken, expiresAt } = response.data.data;
-
-      // Store tokens using token manager
-      await tokenManager.setTokens({
-        accessToken: token,
-        refreshToken,
-        expiresAt,
-      });
+      const authResponse = await AuthService.register(params);
+      const user = convertAuthResponseToUser(authResponse);
       
+      // Store token and user data
+      await storage.setItem(STORAGE_KEYS.AUTH_TOKEN, authResponse.token);
       await storage.setItem(STORAGE_KEYS.USER_DATA, user);
 
       set({
         user,
-        token,
+        token: authResponse.token,
         isAuthenticated: true,
         isLoading: false,
       });
@@ -99,12 +111,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       logger.info('User registered successfully');
     } catch (error: any) {
       set({ isLoading: false });
-      const apiError = {
-        message: error.response?.data?.message || ERROR_MESSAGES.GENERIC_ERROR,
-        status: error.response?.status || 0,
-        code: error.response?.data?.code,
-      };
-      throw apiError;
+      logger.error('Registration failed:', error);
+      throw error;
     }
   },
 
@@ -113,19 +121,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const { token } = get();
       
       if (token) {
-        // Use direct axios call to avoid circular dependency during logout
-        await axios.post(
-          `${config().API_BASE_URL}${API_ENDPOINTS.AUTH.LOGOUT}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await AuthService.logout(token);
       }
 
-      await tokenManager.clearTokens();
+      // Clear stored data
+      await storage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
       await storage.removeItem(STORAGE_KEYS.USER_DATA);
 
       set({
@@ -139,7 +139,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     } catch (error) {
       logger.error('Logout error:', error);
       // Still clear local state even if API call fails
-      await tokenManager.clearTokens();
+      await storage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
       await storage.removeItem(STORAGE_KEYS.USER_DATA);
       
       set({
@@ -148,57 +148,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         isAuthenticated: false,
         isLoading: false,
       });
-    }
-  },
-
-  refreshToken: async () => {
-    try {
-      const refreshToken = await tokenManager.getRefreshToken();
-      
-      if (!refreshToken) {
-        throw new Error('No refresh token available');
-      }
-      
-      // Use direct axios call to avoid circular dependency
-      const response = await axios.post<ApiResponse<{ user: User; token: string; refreshToken?: string; expiresAt?: number }>>(
-        `${config().API_BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`,
-        { refreshToken }
-      );
-
-      const { user, token, refreshToken: newRefreshToken, expiresAt } = response.data.data;
-
-      // Store new tokens
-      await tokenManager.setTokens({
-        accessToken: token,
-        refreshToken: newRefreshToken || refreshToken, // Use new refresh token if provided, otherwise keep the old one
-        expiresAt,
-      });
-      
-      await storage.setItem(STORAGE_KEYS.USER_DATA, user);
-
-      set({ user, token, isAuthenticated: true });
-      
-      logger.info('Token refreshed successfully');
-    } catch (error: any) {
-      logger.error('Token refresh failed:', error);
-      
-      // Clear tokens and logout user
-      await tokenManager.clearTokens();
-      await storage.removeItem(STORAGE_KEYS.USER_DATA);
-      
-      set({
-        user: null,
-        token: null,
-        isAuthenticated: false,
-        isLoading: false,
-      });
-      
-      const apiError = {
-        message: error.response?.data?.message || 'Token refresh failed',
-        status: error.response?.status || 0,
-        code: error.response?.data?.code,
-      };
-      throw apiError;
     }
   },
 
@@ -206,12 +155,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     try {
       set({ isLoading: true });
       
-      // Import apiClient dynamically to avoid issues during initialization
-      const updatedUser = await apiClient.put<User>(
-        API_ENDPOINTS.AUTH.LOGIN,
-        userData
-      );
+      const { user } = get();
+      if (!user) throw new Error('No user found');
 
+      const updatedUser = { ...user, ...userData };
       await storage.setItem(STORAGE_KEYS.USER_DATA, updatedUser);
       
       set({ 
@@ -225,31 +172,15 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       throw error;
     }
   },
+
   initializeAuth: async () => {
     try {
       set({ isLoading: true });
       
-      const token = await tokenManager.getAccessToken();
+      const token = await storage.getItem<string>(STORAGE_KEYS.AUTH_TOKEN);
       const user = await storage.getItem<User>(STORAGE_KEYS.USER_DATA);
 
       if (token && user) {
-        // Check if token is expired
-        const isExpired = await tokenManager.isTokenExpired();
-        
-        if (isExpired) {
-          logger.info('Token expired during initialization, attempting refresh...');
-          try {
-            await get().refreshToken();
-          } catch (refreshError) {
-            logger.error('Failed to refresh token during initialization:', refreshError);
-            // Clear invalid tokens and user data
-            await tokenManager.clearTokens();
-            await storage.removeItem(STORAGE_KEYS.USER_DATA);
-            set({ isLoading: false });
-            return;
-          }
-        }
-        
         set({
           user,
           token,

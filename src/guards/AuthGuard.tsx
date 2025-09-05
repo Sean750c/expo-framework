@@ -25,7 +25,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
     if (!isLoading && !isAuthenticated) {
       // 延迟导航，确保 RootLayout 已挂载
       setTimeout(() => {
-        router.replace(redirectTo as any);
+        router.replace('/login' as any);
       }, 0);
     }
   }, [isAuthenticated, isLoading, router, redirectTo]);
