@@ -20,12 +20,8 @@ export class AppService {
         params
       );
 
-      if (!response.success) {
-        throw new Error(response.msg || 'App initialization failed');
-      }
-
       logger.info('App initialized successfully');
-      return response.data;
+      return response;
     } catch (error) {
       logger.error('App initialization failed:', error);
       throw error;
@@ -49,11 +45,7 @@ export class AppService {
         signedParams
       );
 
-      if (!response.success) {
-        throw new Error(response.msg || 'API request failed');
-      }
-
-      return response.data;
+      return response;
     } catch (error) {
       logger.error(`API request failed for ${endpoint}:`, error);
       throw error;

@@ -80,6 +80,11 @@ class ApiClient {
   // ---------- 封装方法 ----------
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.get<ApiResponse<T>>(url, config);
+    
+    if (!response.data.success) {
+      throw new Error(response.data.msg || 'API request failed');
+    }
+    
     return response.data.data;
   }
 
@@ -95,6 +100,11 @@ class ApiClient {
         },
       }
     );
+    
+    if (!response.data.success) {
+      throw new Error(response.data.msg || 'API request failed');
+    }
+    
     return response.data.data;
   }
 
@@ -110,6 +120,11 @@ class ApiClient {
         },
       }
     );
+    
+    if (!response.data.success) {
+      throw new Error(response.data.msg || 'API request failed');
+    }
+    
     return response.data.data;
   }
 
@@ -125,6 +140,11 @@ class ApiClient {
         },
       }
     );
+    
+    if (!response.data.success) {
+      throw new Error(response.data.msg || 'API request failed');
+    }
+    
     return response.data.data;
   }
 
@@ -140,6 +160,11 @@ class ApiClient {
         },
       }
     );
+    
+    if (!response.data.success) {
+      throw new Error(response.data.msg || 'API request failed');
+    }
+    
     return response.data.data;
   }
 

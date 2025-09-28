@@ -17,12 +17,8 @@ export class AuthService {
         signedParams
       );
 
-      if (!response.success) {
-        throw new Error(response.msg || 'User register failed');
-      }
-
       logger.info('User register successfully');
-      return response.data;
+      return response;
     } catch (error) {
       logger.error('User register failed:', error);
       throw error;
@@ -42,12 +38,8 @@ export class AuthService {
         signedParams
       );
 
-      if (!response.success) {
-        throw new Error(response.msg || 'User login failed');
-      }
-
       logger.info('User login successfully');
-      return response.data;
+      return response;
     } catch (error) {
       logger.error('User login failed:', error);
       throw error;
@@ -66,10 +58,6 @@ export class AuthService {
         '/gc/user/applogout',
         signedParams
       );
-
-      if (!response.success) {
-        throw new Error(response.msg || 'User logout failed');
-      }
 
       logger.info('User logout successfully');
     } catch (error) {
