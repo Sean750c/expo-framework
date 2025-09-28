@@ -15,17 +15,17 @@ export class AppService {
       const params = await SignatureUtils.prepareRequestParams();
 
       // Make API request
-      const response = await apiClient.postRaw<ApiResponse<AppInitResponse>>(
+      const response = await apiClient.post<ApiResponse<AppInitResponse>>(
         '/gc/public/appinit',
         params
       );
 
-      if (!response.data.success) {
-        throw new Error(response.data.msg || 'App initialization failed');
+      if (!response.success) {
+        throw new Error(response.msg || 'App initialization failed');
       }
 
       logger.info('App initialized successfully');
-      return response.data.data;
+      return response.data;
     } catch (error) {
       logger.error('App initialization failed:', error);
       throw error;
@@ -44,16 +44,16 @@ export class AppService {
       const signedParams = await SignatureUtils.prepareRequestParams(params);
 
       // Make API request
-      const response = await apiClient.postRaw<ApiResponse<T>>(
+      const response = await apiClient.post<ApiResponse<T>>(
         endpoint,
         signedParams
       );
 
-      if (!response.data.success) {
-        throw new Error(response.data.msg || 'API request failed');
+      if (!response.success) {
+        throw new Error(response.msg || 'API request failed');
       }
 
-      return response.data.data;
+      return response.data;
     } catch (error) {
       logger.error(`API request failed for ${endpoint}:`, error);
       throw error;

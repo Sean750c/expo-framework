@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as Device from 'expo-device';
+import MD5 from "crypto-js/md5";
 import config from '@/src/config';
 
 export interface DeviceInfo {
@@ -136,11 +137,18 @@ export class SignatureUtils {
     // Create signature string
     const signatureString = queryString + appConfig.APP_KEY;
 
-    // Generate MD5 hash
-    const signature = await Crypto.digestStringAsync(
+    // 生成 MD5
+  let signature: string;
+  if (Platform.OS === "web") {
+    // Web 端用 crypto-js
+    signature = MD5(signatureString).toString();
+  } else {
+    // RN 原生端用 expo-crypto
+    signature = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.MD5,
       signatureString
     );
+  }
 
     return signature.toLowerCase();
   }

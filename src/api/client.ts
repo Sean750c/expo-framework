@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import qs from 'qs';
 import config from '@/src/config';
 import { storage } from '@/src/utils/storage';
 import { logger } from '@/src/utils/logger';
@@ -14,7 +15,7 @@ class ApiClient {
       baseURL: config().API_BASE_URL,
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json', // 默认 GET/Raw 用 JSON
       },
     });
 
@@ -45,10 +46,8 @@ class ApiClient {
         return response;
       },
       async (error) => {
-        
         logger.error('API Error:', error.response?.status, error.config?.url, error.message);
 
-        // Check if error message contains "Session expired"
         const errorMessage = error.response?.data?.msg || error.response?.data?.message || '';
         if (errorMessage.includes('Session expired') || error.response?.status === 401) {
           await this.handleUnauthorized();
@@ -69,43 +68,82 @@ class ApiClient {
 
   private async handleUnauthorized() {
     try {
-      // Import authStore dynamically to avoid circular dependency
       const authStore = useAuthStore.getState();
       await authStore.logout();
     } catch (error) {
       logger.error('Error during logout:', error);
-      // Fallback: clear storage manually
       await storage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
       await storage.removeItem(STORAGE_KEYS.USER_DATA);
     }
   }
 
+  // ---------- 封装方法 ----------
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.get<ApiResponse<T>>(url, config);
     return response.data.data;
   }
 
   async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.post<ApiResponse<T>>(url, data, config);
+    const response = await this.client.post<ApiResponse<T>>(
+      url,
+      qs.stringify(data), // form-urlencoded
+      {
+        ...config,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(config?.headers || {}),
+        },
+      }
+    );
     return response.data.data;
   }
 
   async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.put<ApiResponse<T>>(url, data, config);
-    return response.data.data;
-  }
-
-  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.delete<ApiResponse<T>>(url, config);
+    const response = await this.client.put<ApiResponse<T>>(
+      url,
+      qs.stringify(data),
+      {
+        ...config,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(config?.headers || {}),
+        },
+      }
+    );
     return response.data.data;
   }
 
   async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.patch<ApiResponse<T>>(url, data, config);
+    const response = await this.client.patch<ApiResponse<T>>(
+      url,
+      qs.stringify(data),
+      {
+        ...config,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(config?.headers || {}),
+        },
+      }
+    );
     return response.data.data;
   }
 
-  // Raw methods that return the full response (for APIs with different response structure)
+  async delete<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    const response = await this.client.delete<ApiResponse<T>>(
+      url,
+      {
+        ...config,
+        data: qs.stringify(data),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(config?.headers || {}),
+        },
+      }
+    );
+    return response.data.data;
+  }
+
+  // ---------- Raw methods (保留 JSON 灵活用) ----------
   async postRaw<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return await this.client.post<T>(url, data, config);
   }

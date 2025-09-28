@@ -1,10 +1,10 @@
 import { SignatureUtils } from '@/src/utils/signature';
 import { logger } from '@/src/utils/logger';
 import { apiClient } from './client';
-import { ApiResponse, RegisterRequest, LoginRequest, AuthResponse } from '@/src/types';
+import { ApiResponse, RegisterRequest, LoginRequest, AuthResponse, User } from '@/src/types';
 
 export class AuthService {
-  static async register(params: RegisterRequest): Promise<AuthResponse> {
+  static async register(params: RegisterRequest): Promise<User> {
     try {
       logger.info('User register...');
 
@@ -12,24 +12,24 @@ export class AuthService {
       const signedParams = await SignatureUtils.prepareRequestParams(params);
 
       // Make API request
-      const response = await apiClient.postRaw<ApiResponse<AuthResponse>>(
+      const response = await apiClient.post<AuthResponse>(
         '/gc/user/appregister',
         signedParams
       );
 
-      if (!response.data.success) {
-        throw new Error(response.data.msg || 'User register failed');
+      if (!response.success) {
+        throw new Error(response.msg || 'User register failed');
       }
 
       logger.info('User register successfully');
-      return response.data.data;
+      return response.data;
     } catch (error) {
       logger.error('User register failed:', error);
       throw error;
     }
   }
 
-  static async login(params: LoginRequest): Promise<AuthResponse> {
+  static async login(params: LoginRequest): Promise<User> {
     try {
       logger.info('User login...');
 
@@ -37,17 +37,17 @@ export class AuthService {
       const signedParams = await SignatureUtils.prepareRequestParams(params);
 
       // Make API request
-      const response = await apiClient.postRaw<ApiResponse<AuthResponse>>(
+      const response = await apiClient.post<AuthResponse>(
         '/gc/user/applogin',
         signedParams
       );
 
-      if (!response.data.success) {
-        throw new Error(response.data.msg || 'User login failed');
+      if (!response.success) {
+        throw new Error(response.msg || 'User login failed');
       }
 
       logger.info('User login successfully');
-      return response.data.data;
+      return response.data;
     } catch (error) {
       logger.error('User login failed:', error);
       throw error;
@@ -62,13 +62,13 @@ export class AuthService {
       const signedParams = await SignatureUtils.prepareRequestParams({ token });
 
       // Make API request
-      const response = await apiClient.postRaw<ApiResponse<{}>>(
+      const response = await apiClient.post<ApiResponse<{}>>(
         '/gc/user/applogout',
         signedParams
       );
 
-      if (!response.data.success) {
-        throw new Error(response.data.msg || 'User logout failed');
+      if (!response.success) {
+        throw new Error(response.msg || 'User logout failed');
       }
 
       logger.info('User logout successfully');
