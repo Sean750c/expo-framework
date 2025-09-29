@@ -261,7 +261,7 @@ const OrdersContent: React.FC = () => {
                 </View>
               </TouchableOpacity>
             </AnimatedView>
-          ))}
+          ))
           )}
         </SlideUpView>
       </ScrollView>
