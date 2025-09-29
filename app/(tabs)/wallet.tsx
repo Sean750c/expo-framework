@@ -9,6 +9,7 @@ import { Loading } from '@/src/components/common/Loading';
 import { Button } from '@/src/components/common/Button';
 import { Modal } from '@/src/components/common/Modal';
 import { AppHeader } from '@/src/components/common/AppHeader';
+import { AnimatedView, SlideUpView } from '@/src/components/common/AnimatedView';
 import { 
   Wallet as WalletIcon, 
   ArrowUpRight, 
@@ -77,7 +78,7 @@ const WalletContent: React.FC = () => {
       />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Balance Card */}
-        <View style={[styles.balanceCard, { backgroundColor: theme.colors.primary }]}>
+        <SlideUpView delay={100} style={[styles.balanceCard, { backgroundColor: theme.colors.primary }]}>
           <View style={styles.balanceHeader}>
             <WalletIcon size={24} color="#FFFFFF" />
             <Text style={styles.balanceLabel}>Available Balance</Text>
@@ -112,11 +113,169 @@ const WalletContent: React.FC = () => {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </SlideUpView>
 
         {/* Stats */}
-        <View style={styles.statsContainer}>
-          <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
+        <AnimatedView animation="slideUp" delay={200} style={styles.statsContainer}>
+          <AnimatedView animation="scale" delay={300}>
+            <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
+              <DollarSign size={20} color={theme.colors.success} />
+              <Text style={[styles.statValue, { color: theme.colors.text }]}>
+                ${wallet?.totalEarnings.toFixed(2) || '0.00'}
+              </Text>
+              <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
+                Total Earnings
+              </Text>
+            </View>
+          </AnimatedView>
+          
+          <AnimatedView animation="scale" delay={400}>
+            <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
+              <TrendingUp size={20} color={theme.colors.primary} />
+              <Text style={[styles.statValue, { color: theme.colors.text }]}>
+                {withdrawalHistory.length}
+              </Text>
+              <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
+                Withdrawals
+              </Text>
+            </View>
+          </AnimatedView>
+        </AnimatedView>
+
+        {/* Recent Transactions */}
+        <SlideUpView delay={500} style={styles.transactionsSection}>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+              Recent Transactions
+            </Text>
+            <TouchableOpacity onPress={() => router.push('/transactions' as any)}>
+              <Text style={[styles.viewAllText, { color: theme.colors.primary }]}>
+                View All
+              </Text>
+            </TouchableOpacity>
+          </View>
+          
+          {transactions.length === 0 ? (
+            <View style={[styles.emptyTransactions, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.emptyText, { color: theme.colors.textSecondary }]}>
+                No transactions yet
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.transactionsList}>
+              {transactions.slice(0, 5).map((transaction, index) => (
+                <AnimatedView
+                  key={transaction.id}
+                  animation="slideLeft"
+                  delay={600 + index * 100}
+                >
+                  <View
+                    style={[styles.transactionItem, { backgroundColor: theme.colors.surface }]}
+                  >
+                    <View style={styles.transactionIcon}>
+                      {transaction.type === 'credit' ? (
+                        <ArrowDownLeft size={16} color={theme.colors.success} />
+                      ) : (
+                        <ArrowUpRight size={16} color={theme.colors.error} />
+                      )}
+                    </View>
+                    
+                    <View style={styles.transactionInfo}>
+                      <Text style={[styles.transactionDescription, { color: theme.colors.text }]}>
+                        {transaction.description}
+                      </Text>
+                      <Text style={[styles.transactionDate, { color: theme.colors.textSecondary }]}>
+                        {new Date(transaction.createdAt).toLocaleDateString()}
+                      </Text>
+                    </View>
+                    
+                    <Text
+                      style={[
+                        styles.transactionAmount,
+                        {
+                          color: transaction.type === 'credit' 
+                            ? theme.colors.success 
+                            : theme.colors.error
+                        }
+                      ]}
+                    >
+                      {transaction.type === 'credit' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                    </Text>
+                  </View>
+                </AnimatedView>
+              ))}
+            </View>
+          )}
+        </SlideUpView>
+
+        {/* Recent Withdrawals */}
+        <SlideUpView delay={800} style={styles.withdrawalsSection}>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+              Recent Withdrawals
+            </Text>
+            <TouchableOpacity onPress={() => router.push('/withdrawal-history' as any)}>
+              <Text style={[styles.viewAllText, { color: theme.colors.primary }]}>
+                View All
+              </Text>
+            </TouchableOpacity>
+          </View>
+          
+          {withdrawalHistory.length === 0 ? (
+            <View style={[styles.emptyTransactions, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.emptyText, { color: theme.colors.textSecondary }]}>
+                No withdrawals yet
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.transactionsList}>
+              {withdrawalHistory.slice(0, 3).map((withdrawal, index) => (
+                <AnimatedView
+                  key={withdrawal.id}
+                  animation="slideLeft"
+                  delay={900 + index * 100}
+                >
+                  <View
+                    style={[styles.transactionItem, { backgroundColor: theme.colors.surface }]}
+                  >
+                    <View style={styles.transactionIcon}>
+                      <ArrowUpRight size={16} color={theme.colors.primary} />
+                    </View>
+                    
+                    <View style={styles.transactionInfo}>
+                      <Text style={[styles.transactionDescription, { color: theme.colors.text }]}>
+                        {withdrawal.method.name}
+                      </Text>
+                      <Text style={[styles.transactionDate, { color: theme.colors.textSecondary }]}>
+                        {new Date(withdrawal.requestedAt).toLocaleDateString()}
+                      </Text>
+                    </View>
+                    
+                    <View style={styles.withdrawalStatus}>
+                      <Text style={[styles.transactionAmount, { color: theme.colors.text }]}>
+                        ${withdrawal.amount.toFixed(2)}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.statusText,
+                          {
+                            color: withdrawal.status === 'completed' 
+                              ? theme.colors.success 
+                              : withdrawal.status === 'rejected'
+                              ? theme.colors.error
+                              : theme.colors.warning
+                          }
+                        ]}
+                      >
+                        {withdrawal.status}
+                      </Text>
+                    </View>
+                  </View>
+                </AnimatedView>
+              ))}
+            </View>
+          )}
+        </SlideUpView>
             <DollarSign size={20} color={theme.colors.success} />
             <Text style={[styles.statValue, { color: theme.colors.text }]}>
               ${wallet?.totalEarnings.toFixed(2) || '0.00'}

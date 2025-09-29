@@ -22,6 +22,7 @@ import { Button } from '@/src/components/common/Button';
 import { Input } from '@/src/components/common/Input';
 import { Modal } from '@/src/components/common/Modal';
 import { AppHeader } from '@/src/components/common/AppHeader';
+import { AnimatedView, SlideUpView } from '@/src/components/common/AnimatedView';
 import { GiftCard } from '@/src/types/giftcard';
 import { GiftCardService } from '@/src/api/giftCardService';
 import { 
@@ -205,9 +206,189 @@ const SellCardContent: React.FC = () => {
       />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Form */}
-        <View style={styles.form}>
+        <SlideUpView delay={100} style={styles.form}>
           {/* Gift Card Selection */}
-          <View style={styles.fieldContainer}>
+          <AnimatedView animation="slideUp" delay={200}>
+            <View style={styles.fieldContainer}>
+              <Text style={[styles.fieldLabel, { color: theme.colors.text }]}>
+                Gift Card Type *
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.cardSelector,
+                  { 
+                    backgroundColor: theme.colors.surface,
+                    borderColor: errors.giftCardId ? theme.colors.error : theme.colors.border
+                  }
+                ]}
+                onPress={() => setShowCardPicker(true)}
+              >
+                {selectedCard ? (
+                  <View style={styles.selectedCard}>
+                    <Image source={{ uri: selectedCard.logo }} style={styles.cardLogo} />
+                    <View style={styles.cardInfo}>
+                      <Text style={[styles.cardName, { color: theme.colors.text }]}>
+                        {selectedCard.name}
+                      </Text>
+                      <Text style={[styles.cardRate, { color: theme.colors.primary }]}>
+                        {(selectedCard.rate * 100).toFixed(0)}% rate
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <Text style={[styles.placeholderText, { color: theme.colors.textSecondary }]}>
+                    Select gift card type
+                  </Text>
+                )}
+                <ChevronDown size={20} color={theme.colors.textSecondary} />
+              </TouchableOpacity>
+              {errors.giftCardId && (
+                <Text style={[styles.errorText, { color: theme.colors.error }]}>
+                  {errors.giftCardId.message}
+                </Text>
+              )}
+            </View>
+          </AnimatedView>
+
+          {/* Amount */}
+          <AnimatedView animation="slideUp" delay={300}>
+            <Controller
+              control={control}
+              name="amount"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Gift Card Amount *"
+                  value={value?.toString() || ''}
+                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                  onBlur={onBlur}
+                  error={errors.amount?.message}
+                  placeholder="Enter amount"
+                  keyboardType="numeric"
+                  required
+                />
+              )}
+            />
+          </AnimatedView>
+
+          {/* Estimated Value */}
+          {estimatedValue > 0 && (
+            <AnimatedView animation="scale" delay={400}>
+              <View style={[styles.estimatedValue, { backgroundColor: theme.colors.surface }]}>
+                <DollarSign size={20} color={theme.colors.success} />
+                <Text style={[styles.estimatedText, { color: theme.colors.text }]}>
+                  Estimated Value: 
+                  <Text style={{ color: theme.colors.success, fontWeight: '600' }}>
+                    {' '}${estimatedValue.toFixed(2)}
+                  </Text>
+                </Text>
+              </View>
+            </AnimatedView>
+          )}
+
+          {/* Card Details */}
+          <AnimatedView animation="slideUp" delay={500}>
+            <Controller
+              control={control}
+              name="cardNumber"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Card Number (Optional)"
+                  value={value || ''}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.cardNumber?.message}
+                  placeholder="Enter card number if available"
+                  autoCapitalize="none"
+                />
+              )}
+            />
+          </AnimatedView>
+
+          <AnimatedView animation="slideUp" delay={600}>
+            <Controller
+              control={control}
+              name="cardPin"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Card PIN/Code (Optional)"
+                  value={value || ''}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.cardPin?.message}
+                  placeholder="Enter PIN or security code if available"
+                  secureTextEntry
+                />
+              )}
+            />
+          </AnimatedView>
+
+          {/* Images */}
+          <AnimatedView animation="slideUp" delay={700}>
+            <View style={styles.fieldContainer}>
+              <Text style={[styles.fieldLabel, { color: theme.colors.text }]}>
+                Gift Card Images *
+              </Text>
+              <Text style={[styles.fieldDescription, { color: theme.colors.textSecondary }]}>
+                Upload clear photos of both sides of your gift card
+              </Text>
+              
+              <View style={styles.imagesContainer}>
+                {images.map((imageUri, index) => (
+                  <AnimatedView
+                    key={index}
+                    animation="scale"
+                    delay={800 + index * 100}
+                  >
+                    <View style={styles.imageItem}>
+                      <Image source={{ uri: imageUri }} style={styles.uploadedImage} />
+                      <TouchableOpacity
+                        style={[styles.removeImageButton, { backgroundColor: theme.colors.error }]}
+                        onPress={() => removeImage(index)}
+                      >
+                        <X size={16} color="#FFFFFF" />
+                      </TouchableOpacity>
+                    </View>
+                  </AnimatedView>
+                ))}
+                
+                {images.length < 4 && (
+                  <TouchableOpacity
+                    style={[styles.addImageButton, { backgroundColor: theme.colors.surface }]}
+                    onPress={showImagePicker}
+                  >
+                    <Upload size={24} color={theme.colors.primary} />
+                    <Text style={[styles.addImageText, { color: theme.colors.primary }]}>
+                      Add Image
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          </AnimatedView>
+
+          {/* Warning */}
+          <AnimatedView animation="bounce" delay={900}>
+            <View style={[styles.warningContainer, { backgroundColor: theme.colors.warning + '20' }]}>
+              <AlertCircle size={20} color={theme.colors.warning} />
+              <Text style={[styles.warningText, { color: theme.colors.text }]}>
+                Please ensure your gift card images are clear and readable. 
+                Blurry or unreadable images may result in rejection.
+              </Text>
+            </View>
+          </AnimatedView>
+
+          {/* Submit Button */}
+          <AnimatedView animation="bounce" delay={1000}>
+            <Button
+              title="Submit for Review"
+              onPress={handleSubmit(onSubmit)}
+              loading={loading}
+              disabled={!isValid || images.length === 0}
+              size="large"
+              style={styles.submitButton}
+            />
+          </AnimatedView>
+        </SlideUpView>
             <Text style={[styles.fieldLabel, { color: theme.colors.text }]}>
               Gift Card Type *
             </Text>

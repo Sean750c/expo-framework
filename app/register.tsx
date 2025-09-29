@@ -8,6 +8,7 @@ import { useAuthStore } from '@/src/store/authStore';
 import { Button } from '@/src/components/common/Button';
 import { Input } from '@/src/components/common/Input';
 import { AppHeader } from '@/src/components/common/AppHeader';
+import { AnimatedView, SlideUpView } from '@/src/components/common/AnimatedView';
 import { registerSchema } from '@/src/utils/validation';
 import { RegisterRequest } from '@/src/types';
 import { UserPlus } from 'lucide-react-native';
@@ -64,109 +65,121 @@ export default function RegisterScreen() {
       />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Registration Form */}
-        <View style={styles.formContainer}>
-          <View style={styles.logoSection}>
+        <SlideUpView delay={100} style={styles.formContainer}>
+          <AnimatedView animation="bounce" delay={200} style={styles.logoSection}>
             <View style={[styles.logoContainer, { backgroundColor: theme.colors.primary }]}>
               <UserPlus size={32} color="#FFFFFF" />
             </View>
-          </View>
+          </AnimatedView>
 
-          <Controller
-            control={control}
-            name="username"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="Username"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={errors.username?.message}
-                placeholder="Choose a username"
-                autoCapitalize="none"
-                required
-              />
-            )}
-          />
+          <AnimatedView animation="slideUp" delay={300}>
+            <Controller
+              control={control}
+              name="username"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Username"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.username?.message}
+                  placeholder="Choose a username"
+                  autoCapitalize="none"
+                  required
+                />
+              )}
+            />
+          </AnimatedView>
 
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="Email"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={errors.email?.message}
-                placeholder="Enter your email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                required
-              />
-            )}
-          />
+          <AnimatedView animation="slideUp" delay={400}>
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Email"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.email?.message}
+                  placeholder="Enter your email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  required
+                />
+              )}
+            />
+          </AnimatedView>
 
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="Password"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={errors.password?.message}
-                placeholder="Create a password"
-                secureTextEntry
-                required
-              />
-            )}
-          />
+          <AnimatedView animation="slideUp" delay={500}>
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Password"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.password?.message}
+                  placeholder="Create a password"
+                  secureTextEntry
+                  required
+                />
+              )}
+            />
+          </AnimatedView>
 
-          <Controller
-            control={control}
-            name="confirmPassword"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="Confirm Password"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={errors.confirmPassword?.message}
-                placeholder="Confirm your password"
-                secureTextEntry
-                required
-              />
-            )}
-          />
+          <AnimatedView animation="slideUp" delay={600}>
+            <Controller
+              control={control}
+              name="confirmPassword"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Confirm Password"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.confirmPassword?.message}
+                  placeholder="Confirm your password"
+                  secureTextEntry
+                  required
+                />
+              )}
+            />
+          </AnimatedView>
 
-          <Controller
-            control={control}
-            name="recommendCode"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="Referral Code (Optional)"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={errors.recommendCode?.message}
-                placeholder="Enter referral code if you have one"
-                autoCapitalize="none"
-              />
-            )}
-          />
+          <AnimatedView animation="slideUp" delay={700}>
+            <Controller
+              control={control}
+              name="recommendCode"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="Referral Code (Optional)"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.recommendCode?.message}
+                  placeholder="Enter referral code if you have one"
+                  autoCapitalize="none"
+                />
+              )}
+            />
+          </AnimatedView>
 
-          <Button
-            title="Create Account"
-            onPress={handleSubmit(onSubmit)}
-            loading={isLoading}
-            disabled={!isValid}
-            style={styles.registerButton}
-          />
-        </View>
+          <AnimatedView animation="bounce" delay={800}>
+            <Button
+              title="Create Account"
+              onPress={handleSubmit(onSubmit)}
+              loading={isLoading}
+              disabled={!isValid}
+              style={styles.registerButton}
+            />
+          </AnimatedView>
+        </SlideUpView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <AnimatedView animation="fade" delay={900} style={styles.footer}>
           <Text style={[styles.footerText, { color: theme.colors.textSecondary }]}>
             Already have an account?{' '}
           </Text>
@@ -176,7 +189,7 @@ export default function RegisterScreen() {
             variant="ghost"
             size="small"
           />
-        </View>
+        </AnimatedView>
       </ScrollView>
     </View>
   );

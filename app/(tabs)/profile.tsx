@@ -10,6 +10,7 @@ import { Input } from '@/src/components/common/Input';
 import { Modal } from '@/src/components/common/Modal';
 import { AuthGuard } from '@/src/guards/AuthGuard';
 import { AppHeader } from '@/src/components/common/AppHeader';
+import { AnimatedView, SlideUpView } from '@/src/components/common/AnimatedView';
 import { profileSchema } from '@/src/utils/validation';
 import { 
   User, 
@@ -133,7 +134,7 @@ const ProfileContent: React.FC = () => {
       />
       <ScrollView style={styles.scrollView}>
         {/* Profile Header */}
-        <View style={styles.header}>
+        <SlideUpView delay={100} style={styles.header}>
           <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primary }]}>
             <User size={40} color="#FFFFFF" />
           </View>
@@ -153,10 +154,10 @@ const ProfileContent: React.FC = () => {
             size="small"
             style={styles.editButton}
           />
-        </View>
+        </SlideUpView>
 
         {/* Profile Info */}
-        <View style={styles.infoSection}>
+        <AnimatedView animation="slideUp" delay={200} style={styles.infoSection}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             Profile Information
           </Text>
@@ -189,10 +190,10 @@ const ProfileContent: React.FC = () => {
               </Text>
             </View>
           </View>
-        </View>
+        </AnimatedView>
 
         {/* Settings Section */}
-        <View style={styles.settingsSection}>
+        <SlideUpView delay={300} style={styles.settingsSection}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             Settings
           </Text>
@@ -232,10 +233,10 @@ const ProfileContent: React.FC = () => {
             icon={<HelpCircle size={20} color={theme.colors.primary} />}
             showArrow
           />
-        </View>
+        </SlideUpView>
 
         {/* System Info */}
-        <View style={styles.systemSection}>
+        <AnimatedView animation="slideUp" delay={400} style={styles.systemSection}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             System Information
           </Text>
@@ -277,10 +278,10 @@ const ProfileContent: React.FC = () => {
               </Text>
             </View>
           </View>
-        </View>
+        </AnimatedView>
 
         {/* Logout */}
-        <View style={styles.logoutSection}>
+        <AnimatedView animation="bounce" delay={500} style={styles.logoutSection}>
           <TouchableOpacity
             style={[styles.logoutButton, { backgroundColor: theme.colors.error + '20' }]}
             onPress={handleLogout}
@@ -290,7 +291,7 @@ const ProfileContent: React.FC = () => {
               Logout
             </Text>
           </TouchableOpacity>
-        </View>
+        </AnimatedView>
       </ScrollView>
 
       {/* Edit Profile Modal */}

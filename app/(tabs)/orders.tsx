@@ -7,6 +7,7 @@ import { AuthGuard } from '@/src/guards/AuthGuard';
 import { Loading } from '@/src/components/common/Loading';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { AppHeader } from '@/src/components/common/AppHeader';
+import { AnimatedView, SlideUpView } from '@/src/components/common/AnimatedView';
 import { GiftCardSubmission } from '@/src/types/giftcard';
 import { Clock, CheckCircle, XCircle, DollarSign, CreditCard } from 'lucide-react-native';
 
@@ -109,83 +110,88 @@ const OrdersContent: React.FC = () => {
       />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Orders List */}
-        <View style={styles.ordersContainer}>
+        <SlideUpView delay={100} style={styles.ordersContainer}>
           {submissions.map((submission) => (
-            <TouchableOpacity
+            <AnimatedView
               key={submission.id}
-              style={[styles.orderCard, { backgroundColor: theme.colors.surface }]}
-              activeOpacity={0.7}
+              animation="slideUp"
+              delay={200 + submissions.indexOf(submission) * 100}
             >
-              <View style={styles.orderHeader}>
-                <View style={styles.orderInfo}>
-                  <Text style={[styles.orderTitle, { color: theme.colors.text }]}>
-                    {submission.giftCardName}
-                  </Text>
-                  <Text style={[styles.orderDate, { color: theme.colors.textSecondary }]}>
-                    {new Date(submission.submittedAt).toLocaleDateString()}
-                  </Text>
-                </View>
-                
-                <View style={[styles.statusBadge, { backgroundColor: getStatusColor(submission.status) + '20' }]}>
-                  {getStatusIcon(submission.status)}
-                  <Text style={[styles.statusText, { color: getStatusColor(submission.status) }]}>
-                    {getStatusText(submission.status)}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.orderDetails}>
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, { color: theme.colors.textSecondary }]}>
-                    Amount:
-                  </Text>
-                  <Text style={[styles.detailValue, { color: theme.colors.text }]}>
-                    ${submission.amount.toFixed(2)}
-                  </Text>
+              <TouchableOpacity
+                style={[styles.orderCard, { backgroundColor: theme.colors.surface }]}
+                activeOpacity={0.7}
+              >
+                <View style={styles.orderHeader}>
+                  <View style={styles.orderInfo}>
+                    <Text style={[styles.orderTitle, { color: theme.colors.text }]}>
+                      {submission.giftCardName}
+                    </Text>
+                    <Text style={[styles.orderDate, { color: theme.colors.textSecondary }]}>
+                      {new Date(submission.submittedAt).toLocaleDateString()}
+                    </Text>
+                  </View>
+                  
+                  <View style={[styles.statusBadge, { backgroundColor: getStatusColor(submission.status) + '20' }]}>
+                    {getStatusIcon(submission.status)}
+                    <Text style={[styles.statusText, { color: getStatusColor(submission.status) }]}>
+                      {getStatusText(submission.status)}
+                    </Text>
+                  </View>
                 </View>
 
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, { color: theme.colors.textSecondary }]}>
-                    Estimated Value:
-                  </Text>
-                  <Text style={[styles.detailValue, { color: theme.colors.primary }]}>
-                    ${submission.estimatedValue.toFixed(2)}
-                  </Text>
-                </View>
-
-                {submission.actualValue && (
+                <View style={styles.orderDetails}>
                   <View style={styles.detailRow}>
                     <Text style={[styles.detailLabel, { color: theme.colors.textSecondary }]}>
-                      Final Value:
+                      Amount:
                     </Text>
-                    <Text style={[styles.detailValue, { color: theme.colors.success }]}>
-                      ${submission.actualValue.toFixed(2)}
-                    </Text>
-                  </View>
-                )}
-
-                {submission.rejectionReason && (
-                  <View style={styles.rejectionReason}>
-                    <Text style={[styles.rejectionText, { color: theme.colors.error }]}>
-                      Reason: {submission.rejectionReason}
+                    <Text style={[styles.detailValue, { color: theme.colors.text }]}>
+                      ${submission.amount.toFixed(2)}
                     </Text>
                   </View>
-                )}
-              </View>
 
-              <View style={styles.orderFooter}>
-                <Text style={[styles.orderId, { color: theme.colors.textSecondary }]}>
-                  Order #{submission.id.slice(-8).toUpperCase()}
-                </Text>
-                {submission.processedAt && (
-                  <Text style={[styles.processedDate, { color: theme.colors.textSecondary }]}>
-                    Processed: {new Date(submission.processedAt).toLocaleDateString()}
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, { color: theme.colors.textSecondary }]}>
+                      Estimated Value:
+                    </Text>
+                    <Text style={[styles.detailValue, { color: theme.colors.primary }]}>
+                      ${submission.estimatedValue.toFixed(2)}
+                    </Text>
+                  </View>
+
+                  {submission.actualValue && (
+                    <View style={styles.detailRow}>
+                      <Text style={[styles.detailLabel, { color: theme.colors.textSecondary }]}>
+                        Final Value:
+                      </Text>
+                      <Text style={[styles.detailValue, { color: theme.colors.success }]}>
+                        ${submission.actualValue.toFixed(2)}
+                      </Text>
+                    </View>
+                  )}
+
+                  {submission.rejectionReason && (
+                    <View style={styles.rejectionReason}>
+                      <Text style={[styles.rejectionText, { color: theme.colors.error }]}>
+                        Reason: {submission.rejectionReason}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.orderFooter}>
+                  <Text style={[styles.orderId, { color: theme.colors.textSecondary }]}>
+                    Order #{submission.id.slice(-8).toUpperCase()}
                   </Text>
-                )}
-              </View>
-            </TouchableOpacity>
+                  {submission.processedAt && (
+                    <Text style={[styles.processedDate, { color: theme.colors.textSecondary }]}>
+                      Processed: {new Date(submission.processedAt).toLocaleDateString()}
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            </AnimatedView>
           ))}
-        </View>
+        </SlideUpView>
       </ScrollView>
     </View>
   );
