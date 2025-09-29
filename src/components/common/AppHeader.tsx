@@ -50,34 +50,32 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         edges={['top']}
       >
         <View style={styles.header}>
-          {/* Left Section */}
-          <View style={styles.leftSection}>
-            {showBackButton && (
-              <TouchableOpacity
-                style={styles.backButton}
-                onPress={onBackPress}
-                activeOpacity={0.7}
-              >
-                <ArrowLeft size={24} color={textColor} />
-              </TouchableOpacity>
-            )}
-          </View>
+          {/* Left Section - Back Button */}
+          {showBackButton && (
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={onBackPress}
+              activeOpacity={0.7}
+            >
+              <ArrowLeft size={24} color={textColor} />
+            </TouchableOpacity>
+          )}
 
-          {/* Center Section */}
-          <View style={styles.centerSection}>
+          {/* Title Section - Takes remaining space */}
+          <View style={styles.titleSection}>
             {title && (
-              <Text style={[styles.title, { color: textColor, textAlign: 'left' }]} numberOfLines={1}>
+              <Text style={[styles.title, { color: textColor }]} numberOfLines={1}>
                 {title}
               </Text>
             )}
             {subtitle && (
-              <Text style={[styles.subtitle, { color: theme.colors.textSecondary, textAlign: 'left' }]} numberOfLines={1}>
+              <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]} numberOfLines={1}>
                 {subtitle}
               </Text>
             )}
           </View>
 
-          {/* Right Section */}
+          {/* Right Section - Notifications and Custom Components */}
           <View style={styles.rightSection}>
             {showNotification && (
               <TouchableOpacity
@@ -110,56 +108,54 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
     minHeight: 56,
-  },
-  leftSection: {
-    flex: 1,
-    alignItems: 'flex-start',
-  },
-  centerSection: {
-    flex: 2,
-    alignItems: 'flex-start',
-  },
-  rightSection: {
-    flex: 1,
-    alignItems: 'flex-end',
   },
   backButton: {
     padding: 8,
+    marginRight: 8,
     marginLeft: -8,
   },
+  titleSection: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  rightSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
   title: {
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'left',
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: 14,
     marginTop: 2,
-    textAlign: 'left',
+    opacity: 0.8,
   },
   notificationButton: {
     padding: 8,
-    marginRight: -8,
     position: 'relative',
   },
   badge: {
     position: 'absolute',
-    top: 4,
-    right: 4,
+    top: 6,
+    right: 6,
     minWidth: 18,
     height: 18,
     borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 4,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
   },
   badgeText: {
     color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '600',
+    fontSize: 9,
+    fontWeight: '700',
   },
 });
