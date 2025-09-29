@@ -343,7 +343,7 @@ const HelpCenterContent: React.FC = () => {
           <View style={styles.resourcesList}>
             <TouchableOpacity
               style={[styles.resourceItem, { backgroundColor: theme.colors.surface }]}
-              onPress={() => Alert.alert('Terms of Service', 'Terms of Service page coming soon!')}
+              onPress={() => router.push('/terms-of-service' as any)}
             >
               <FileText size={20} color={theme.colors.primary} />
               <Text style={[styles.resourceText, { color: theme.colors.text }]}>
@@ -354,7 +354,7 @@ const HelpCenterContent: React.FC = () => {
             
             <TouchableOpacity
               style={[styles.resourceItem, { backgroundColor: theme.colors.surface }]}
-              onPress={() => Alert.alert('Privacy Policy', 'Privacy Policy page coming soon!')}
+              onPress={() => router.push('/privacy-policy' as any)}
             >
               <Shield size={20} color={theme.colors.primary} />
               <Text style={[styles.resourceText, { color: theme.colors.text }]}>
