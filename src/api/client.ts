@@ -6,6 +6,7 @@ import { logger } from '@/src/utils/logger';
 import { STORAGE_KEYS, ERROR_MESSAGES } from '@/src/constants';
 import { ApiResponse, ApiError } from '@/src/types';
 import { useAuthStore } from '@/src/store/authStore';
+import { showErrorToast } from '@/src/utils/toast';
 
 class ApiClient {
   private client: AxiosInstance;
@@ -51,6 +52,10 @@ class ApiClient {
         const errorMessage = error.response?.data?.msg || error.response?.data?.message || '';
         if (errorMessage.includes('Session expired') || error.response?.status === 401) {
           await this.handleUnauthorized();
+        } else {
+          // Show error toast for other API errors
+          const apiError = this.createApiError(error);
+          showErrorToast('Request Failed', apiError.message);
         }
 
         return Promise.reject(this.createApiError(error));
@@ -60,7 +65,7 @@ class ApiClient {
 
   private createApiError(error: any): ApiError {
     return {
-      message: error.response?.data?.msg || error.response?.data?.message || ERROR_MESSAGES.GENERIC_ERROR,
+      message: error.response?.data?.msg || error.response?.data?.message || error.message || ERROR_MESSAGES.GENERIC_ERROR,
       status: error.response?.status || 0,
       code: error.response?.data?.code,
     };

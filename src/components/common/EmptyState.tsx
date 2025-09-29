@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '@/src/hooks/useTheme';
 import { Button } from './Button';
+import { AnimatedView } from './AnimatedView';
 
 interface EmptyStateProps {
   title: string;
@@ -9,6 +10,8 @@ interface EmptyStateProps {
   actionText?: string;
   onAction?: () => void;
   icon?: React.ReactNode;
+  animation?: boolean;
+  customContent?: React.ReactNode;
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -17,10 +20,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   actionText,
   onAction,
   icon,
+  animation = true,
+  customContent,
 }) => {
   const { theme } = useTheme();
 
-  return (
+  const content = (
     <View style={styles.container}>
       {icon && <View style={styles.iconContainer}>{icon}</View>}
       
@@ -34,14 +39,27 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         </Text>
       )}
       
-      {actionText && onAction && (
-        <Button
-          title={actionText}
-          onPress={onAction}
-          style={styles.button}
-        />
+      {customContent || (
+        actionText && onAction && (
+          <Button
+            title={actionText}
+            onPress={onAction}
+            style={styles.button}
+          />
+        )
       )}
     </View>
+  );
+
+  if (animation) {
+    return (
+      <AnimatedView animation="fade" duration={400}>
+        {content}
+      </AnimatedView>
+    );
+  }
+
+  return content;
   );
 };
 

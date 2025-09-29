@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-  TouchableOpacity,
   Text,
   StyleSheet,
   ActivityIndicator,
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { useTheme } from '@/src/hooks/useTheme';
+import { useAnimatedPress } from '@/src/hooks/useAnimatedPress';
 
 interface ButtonProps {
   title: string;
@@ -31,6 +32,16 @@ export const Button: React.FC<ButtonProps> = ({
   textStyle,
 }) => {
   const { theme } = useTheme();
+  
+  const {
+    animatedStyle,
+    handlePressIn,
+    handlePressOut,
+    handlePress,
+  } = useAnimatedPress(onPress, {
+    hapticFeedback: !disabled && !loading,
+    hapticType: variant === 'primary' ? 'medium' : 'light',
+  });
 
   const buttonStyles = [
     styles.button,
@@ -92,18 +103,19 @@ export const Button: React.FC<ButtonProps> = ({
   }
 
   return (
-    <TouchableOpacity
-      style={buttonStyles}
-      onPress={onPress}
-      disabled={disabled || loading}
-      activeOpacity={0.7}
-    >
+    <Animated.View style={[buttonStyles, animatedStyle]}>
+      <Animated.View
+        onTouchStart={handlePressIn}
+        onTouchEnd={handlePressOut}
+        onPress={handlePress}
+        style={StyleSheet.absoluteFillObject}
+      />
       {loading ? (
         <ActivityIndicator color={getTextColor()} />
       ) : (
         <Text style={textStyles}>{title}</Text>
       )}
-    </TouchableOpacity>
+    </Animated.View>
   );
 };
 
