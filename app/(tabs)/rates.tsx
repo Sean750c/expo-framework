@@ -433,6 +433,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#FFFFFF',
   },
+});
   searchContainer: {
     paddingHorizontal: 20,
     marginBottom: 20,
