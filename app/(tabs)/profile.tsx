@@ -32,8 +32,8 @@ interface ProfileFormData {
 
 const ProfileContent: React.FC = () => {
   const { theme } = useTheme();
-  const { theme: currentTheme, isDark, toggleTheme, isOnline } = useTheme();
-  const { appState } = useAppStore();
+  const { theme: currentTheme, isDark, toggleTheme } = useTheme();
+  const { appState, isOnline, setOnlineStatus } = useAppStore();
   const { user, updateProfile, logout, isLoading } = useAuthStore();
   const [showEditModal, setShowEditModal] = useState(false);
 

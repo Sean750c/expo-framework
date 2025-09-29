@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
@@ -121,7 +121,7 @@ const HomeContent: React.FC = () => {
       >
         {/* Wallet Overview */}
         {wallet && (
-          <SlideUpView delay={100} style={[styles.walletCard, { backgroundColor: theme.colors.primary }]}>
+          <SlideUpView delay={100} style={{ ...styles.walletCard, backgroundColor: theme.colors.primary } as ViewStyle}>
             <View style={styles.walletHeader}>
               <Wallet size={24} color="#FFFFFF" />
               <Text style={styles.walletTitle}>Wallet Balance</Text>
@@ -151,7 +151,7 @@ const HomeContent: React.FC = () => {
 
         {/* VIP Status */}
         {userVip && (
-          <AnimatedView animation="slideUp" delay={200} style={[styles.vipCard, { backgroundColor: theme.colors.surface }]}>
+          <AnimatedView animation="slideUp" delay={200} style={{ ...styles.vipCard, backgroundColor: theme.colors.surface } as ViewStyle}>
             <View style={styles.vipHeader}>
               <Star size={20} color={theme.colors.accent} />
               <Text style={[styles.vipTitle, { color: theme.colors.text }]}>
