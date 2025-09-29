@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
@@ -9,6 +8,7 @@ import { AuthGuard } from '@/src/guards/AuthGuard';
 import { Loading } from '@/src/components/common/Loading';
 import { Button } from '@/src/components/common/Button';
 import { Modal } from '@/src/components/common/Modal';
+import { AppHeader } from '@/src/components/common/AppHeader';
 import { 
   Wallet as WalletIcon, 
   ArrowUpRight, 
@@ -58,13 +58,11 @@ const WalletContent: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.colors.text }]}>
-            My Wallet
-          </Text>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <AppHeader 
+        title="My Wallet"
+        subtitle="Manage your funds and transactions"
+        rightComponent={
           <TouchableOpacity
             onPress={() => setShowBalance(!showBalance)}
             style={styles.eyeButton}
@@ -75,8 +73,9 @@ const WalletContent: React.FC = () => {
               <EyeOff size={20} color={theme.colors.textSecondary} />
             )}
           </TouchableOpacity>
-        </View>
-
+        }
+      />
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Balance Card */}
         <View style={[styles.balanceCard, { backgroundColor: theme.colors.primary }]}>
           <View style={styles.balanceHeader}>
@@ -279,7 +278,7 @@ const WalletContent: React.FC = () => {
           </Text>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -297,17 +296,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    paddingTop: 10,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
   },
   eyeButton: {
     padding: 8,

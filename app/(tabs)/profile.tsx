@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Switch } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTheme } from '@/src/hooks/useTheme';
@@ -10,6 +9,7 @@ import { Button } from '@/src/components/common/Button';
 import { Input } from '@/src/components/common/Input';
 import { Modal } from '@/src/components/common/Modal';
 import { AuthGuard } from '@/src/guards/AuthGuard';
+import { AppHeader } from '@/src/components/common/AppHeader';
 import { profileSchema } from '@/src/utils/validation';
 import { 
   User, 
@@ -126,7 +126,11 @@ const ProfileContent: React.FC = () => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <AppHeader 
+        title="Profile"
+        subtitle="Manage your account and preferences"
+      />
       <ScrollView style={styles.scrollView}>
         {/* Profile Header */}
         <View style={styles.header}>
@@ -341,7 +345,7 @@ const ProfileContent: React.FC = () => {
           />
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 

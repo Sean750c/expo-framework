@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
 import { useGiftCardStore } from '@/src/store/giftCardStore';
 import { AuthGuard } from '@/src/guards/AuthGuard';
 import { Loading } from '@/src/components/common/Loading';
 import { EmptyState } from '@/src/components/common/EmptyState';
+import { AppHeader } from '@/src/components/common/AppHeader';
 import { GiftCardSubmission } from '@/src/types/giftcard';
 import { Clock, CheckCircle, XCircle, DollarSign, CreditCard } from 'lucide-react-native';
 
@@ -102,18 +102,12 @@ const OrdersContent: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <AppHeader 
+        title="My Orders"
+        subtitle="Track your gift card transactions"
+      />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.colors.text }]}>
-            My Orders
-          </Text>
-          <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-            Track your gift card transactions
-          </Text>
-        </View>
-
         {/* Orders List */}
         <View style={styles.ordersContainer}>
           {submissions.map((submission) => (
@@ -193,7 +187,7 @@ const OrdersContent: React.FC = () => {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -211,18 +205,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  header: {
-    padding: 20,
-    paddingTop: 10,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
   },
   ordersContainer: {
     paddingHorizontal: 20,

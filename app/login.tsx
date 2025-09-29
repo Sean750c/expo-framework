@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'expo-router';
@@ -8,6 +7,7 @@ import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
 import { Button } from '@/src/components/common/Button';
 import { Input } from '@/src/components/common/Input';
+import { AppHeader } from '@/src/components/common/AppHeader';
 import { loginSchema } from '@/src/utils/validation';
 import { User, Lock } from 'lucide-react-native';
 
@@ -45,23 +45,20 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <AppHeader 
+        title="Welcome Back"
+        subtitle="Sign in to your account"
+      />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={[styles.logoContainer, { backgroundColor: theme.colors.primary }]}>
-            <User size={32} color="#FFFFFF" />
-          </View>
-          <Text style={[styles.title, { color: theme.colors.text }]}>
-            Welcome Back
-          </Text>
-          <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-            Sign in to your account
-          </Text>
-        </View>
-
         {/* Login Form */}
         <View style={styles.formContainer}>
+          <View style={styles.logoSection}>
+            <View style={[styles.logoContainer, { backgroundColor: theme.colors.primary }]}>
+              <User size={32} color="#FFFFFF" />
+            </View>
+          </View>
+
           <Controller
             control={control}
             name="username"
@@ -119,7 +116,7 @@ export default function LoginScreen() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -131,9 +128,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
   },
-  header: {
+  logoSection: {
     alignItems: 'center',
-    paddingTop: 40,
+    paddingTop: 20,
     paddingBottom: 40,
   },
   logoContainer: {
@@ -142,16 +139,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
   },
   formContainer: {
     marginBottom: 32,

@@ -9,7 +9,6 @@ import {
   Alert,
   Platform 
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,6 +21,7 @@ import { AuthGuard } from '@/src/guards/AuthGuard';
 import { Button } from '@/src/components/common/Button';
 import { Input } from '@/src/components/common/Input';
 import { Modal } from '@/src/components/common/Modal';
+import { AppHeader } from '@/src/components/common/AppHeader';
 import { GiftCard } from '@/src/types/giftcard';
 import { GiftCardService } from '@/src/api/giftCardService';
 import { 
@@ -196,19 +196,14 @@ const SellCardContent: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <AppHeader 
+        title="Sell Gift Card"
+        subtitle="Turn your gift cards into cash"
+        showBackButton
+        onBackPress={() => router.back()}
+      />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <X size={24} color={theme.colors.text} />
-          </TouchableOpacity>
-          <Text style={[styles.title, { color: theme.colors.text }]}>
-            Sell Gift Card
-          </Text>
-          <View style={styles.placeholder} />
-        </View>
-
         {/* Form */}
         <View style={styles.form}>
           {/* Gift Card Selection */}
@@ -399,7 +394,7 @@ const SellCardContent: React.FC = () => {
           ))}
         </ScrollView>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -418,26 +413,8 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 20,
-    paddingTop: 10,
-  },
-  backButton: {
-    padding: 4,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  placeholder: {
-    width: 32,
-  },
   form: {
     padding: 20,
-    paddingTop: 0,
   },
   fieldContainer: {
     marginBottom: 20,
