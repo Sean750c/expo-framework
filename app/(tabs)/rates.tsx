@@ -8,7 +8,8 @@ import {
   Image, 
   RefreshControl,
   TextInput,
-  Dimensions 
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/hooks/useTheme';
@@ -113,17 +114,21 @@ const RatesContent: React.FC = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <AppHeader 
-        title="Live Rates" 
-        subtitle="Get the best rates for your gift cards"
-        rightComponent={
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={styles.header}>
+        <View style={styles.headerTop}>
+          <View>
+            <Text style={[styles.title, { color: theme.colors.text }]}>Live Rates</Text>
+            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
+              Get the best rates for your gift cards
+            </Text>
+          </View>
           <View style={[styles.liveIndicator, { backgroundColor: theme.colors.success }]}>
             <View style={styles.liveDot} />
             <Text style={[styles.liveText, { color: theme.colors.success }]}>LIVE</Text>
           </View>
-        }
-      />
+        </View>
+      </View>
       
       <ScrollView 
         style={styles.scrollView} 
@@ -372,7 +377,7 @@ const RatesContent: React.FC = () => {
           />
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
