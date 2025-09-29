@@ -214,7 +214,7 @@ const ProfileContent: React.FC = () => {
           <SettingItem
             title="Help & Support"
             description="FAQ, contact support, and guides"
-            onPress={() => {/* Navigate to help center */}}
+            onPress={() => router.push('/help' as any)}
             icon={<HelpCircle size={20} color={theme.colors.primary} />}
             showArrow
           />
