@@ -433,7 +433,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#FFFFFF',
   },
-});
   searchContainer: {
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -455,3 +454,220 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   ctaCard: {
+    borderRadius: 16,
+    padding: 20,
+  },
+  ctaContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  ctaText: {
+    flex: 1,
+  },
+  ctaTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  ctaSubtitle: {
+    fontSize: 14,
+    color: '#FFFFFF',
+    opacity: 0.8,
+  },
+  ctaButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
+  },
+  ctaButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  featuresContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    marginBottom: 24,
+    gap: 12,
+  },
+  featureItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    gap: 6,
+  },
+  featureText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginBottom: 16,
+  },
+  sectionTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  horizontalScroll: {
+    paddingLeft: 20,
+  },
+  popularCard: {
+    width: 140,
+    padding: 16,
+    borderRadius: 12,
+    marginRight: 12,
+    alignItems: 'center',
+  },
+  popularCardLogo: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  popularCardName: {
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  rateContainer: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginBottom: 12,
+  },
+  rateText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  sellButton: {
+    width: '100%',
+  },
+  highRateGrid: {
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  highRateCard: {
+    flexDirection: 'row',
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  highRateCardLogo: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    marginRight: 12,
+  },
+  highRateCardInfo: {
+    flex: 1,
+  },
+  highRateCardName: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 2,
+  },
+  highRateCardBrand: {
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  highRateCardBottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  highRateValue: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  categoryContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 24,
+  },
+  categoryChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  categoryText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  cardsGrid: {
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  cardItem: {
+    padding: 16,
+    borderRadius: 12,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  cardLogo: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    marginRight: 12,
+  },
+  cardInfo: {
+    flex: 1,
+  },
+  cardName: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 2,
+  },
+  cardBrand: {
+    fontSize: 12,
+  },
+  rateTag: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  rateTagText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  cardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  cardRange: {
+    fontSize: 12,
+  },
+  quickSellButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  quickSellText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#FFFFFF',
+  },
+});
