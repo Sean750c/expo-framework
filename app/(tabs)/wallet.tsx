@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ViewStyle } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
@@ -77,7 +77,7 @@ const WalletContent: React.FC = () => {
       />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Balance Card */}
-        <SlideUpView delay={100} style={[styles.balanceCard, { backgroundColor: theme.colors.primary }]}>
+        <SlideUpView delay={100} style={{ ...styles.balanceCard,  backgroundColor: theme.colors.primary } as ViewStyle}>
           <View style={styles.balanceHeader}>
             <WalletIcon size={24} color="#FFFFFF" />
             <Text style={styles.balanceLabel}>Available Balance</Text>
