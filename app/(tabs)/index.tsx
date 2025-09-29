@@ -187,14 +187,14 @@ const HomeContent: React.FC = () => {
           <View style={styles.actionsGrid}>
             <TouchableOpacity
               style={[styles.actionCard, { backgroundColor: theme.colors.surface }]}
-              onPress={() => router.push('/(tabs)/giftcards' as any)}
+              onPress={() => router.push('/(tabs)/rates' as any)}
             >
               <Gift size={24} color={theme.colors.primary} />
               <Text style={[styles.actionTitle, { color: theme.colors.text }]}>
-                Browse Cards
+                Live Rates
               </Text>
               <Text style={[styles.actionSubtitle, { color: theme.colors.textSecondary }]}>
-                View supported cards
+                Check current rates
               </Text>
             </TouchableOpacity>
             
