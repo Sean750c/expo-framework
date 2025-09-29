@@ -1,4 +1,5 @@
 import Toast from 'react-native-toast-message';
+import { BaseToast } from 'react-native-toast-message';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -59,7 +60,7 @@ export const hideToast = () => {
 // Custom toast configurations
 export const toastConfig = {
   success: ({ text1, text2, onPress }: any) => (
-    <Toast
+    <BaseToast
       text1={text1}
       text2={text2}
       onPress={onPress}
@@ -79,7 +80,7 @@ export const toastConfig = {
     />
   ),
   error: ({ text1, text2, onPress }: any) => (
-    <Toast
+    <BaseToast
       text1={text1}
       text2={text2}
       onPress={onPress}
@@ -99,7 +100,7 @@ export const toastConfig = {
     />
   ),
   info: ({ text1, text2, onPress }: any) => (
-    <Toast
+    <BaseToast
       text1={text1}
       text2={text2}
       onPress={onPress}
@@ -119,7 +120,7 @@ export const toastConfig = {
     />
   ),
   warning: ({ text1, text2, onPress }: any) => (
-    <Toast
+    <BaseToast
       text1={text1}
       text2={text2}
       onPress={onPress}
