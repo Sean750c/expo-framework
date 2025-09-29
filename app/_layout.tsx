@@ -6,7 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AppProvider } from '@/src/components/AppProvider';
 import { useTheme } from '@/src/hooks/useTheme';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
-import { toastConfig } from '@/src/utils/toast';
+import { toastConfig } from '@/src/utils/toast.tsx';
 
 export default function RootLayout() {
   const ready = useFrameworkReady();

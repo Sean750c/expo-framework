@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   searchBar: {
     flexDirection: 'row',

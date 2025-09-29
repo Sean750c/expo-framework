@@ -6,7 +6,7 @@ import { logger } from '@/src/utils/logger';
 import { STORAGE_KEYS, ERROR_MESSAGES } from '@/src/constants';
 import { ApiResponse, ApiError } from '@/src/types';
 import { useAuthStore } from '@/src/store/authStore';
-import { showErrorToast } from '@/src/utils/toast';
+import { showErrorToast } from '@/src/utils/toast.tsx';
 
 class ApiClient {
   private client: AxiosInstance;
