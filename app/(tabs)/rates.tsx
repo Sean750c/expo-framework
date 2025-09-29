@@ -28,7 +28,7 @@ import {
   Clock,
   ArrowRight,
   Star,
-  Fire
+  Flame
 } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
@@ -184,7 +184,7 @@ const RatesContent: React.FC = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionTitleContainer}>
-                <Fire size={20} color={theme.colors.error} />
+                <Flame size={20} color={theme.colors.error} />
                 <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
                   Popular Cards
                 </Text>
