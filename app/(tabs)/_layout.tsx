@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Home, CreditCard, Wallet, User, Settings, Gift } from 'lucide-react-native';
+import { Home, TrendingUp, CreditCard, Wallet, User } from 'lucide-react-native';
 import { useTheme } from '@/src/hooks/useTheme';
 
 export default function TabLayout() {
@@ -27,11 +27,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="giftcards"
+        name="rates"
         options={{
-          title: 'Gift Cards',
+          title: 'Rates',
           tabBarIcon: ({ size, color }) => (
-            <Gift size={size} color={color} />
+            <TrendingUp size={size} color={color} />
           ),
         }}
       />
@@ -59,15 +59,6 @@ export default function TabLayout() {
           title: 'Profile',
           tabBarIcon: ({ size, color }) => (
             <User size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ size, color }) => (
-            <Settings size={size} color={color} />
           ),
         }}
       />
