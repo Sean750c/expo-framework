@@ -102,8 +102,7 @@ const HomeContent: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader 
-        title={`Hello, ${user?.name || 'User'}!`}
-        subtitle="Turn your gift cards into cash"
+        title="Home"
         showNotification
         notificationCount={unreadCount}
         onNotificationPress={() => router.push('/notifications' as any)}
@@ -119,6 +118,16 @@ const HomeContent: React.FC = () => {
           />
         }
       >
+        {/* Welcome Section */}
+        <SlideUpView delay={50} style={styles.welcomeSection}>
+          <Text style={[styles.welcomeTitle, { color: theme.colors.text }]}>
+            Hello, {user?.name || 'User'}! 👋
+          </Text>
+          <Text style={[styles.welcomeSubtitle, { color: theme.colors.textSecondary }]}>
+            Turn your gift cards into cash
+          </Text>
+        </SlideUpView>
+
         {/* Wallet Overview */}
         {wallet && (
           <SlideUpView delay={100} style={{ ...styles.walletCard, backgroundColor: theme.colors.primary } as ViewStyle}>
@@ -377,5 +386,18 @@ const styles = StyleSheet.create({
   },
   ctaButton: {
     borderRadius: 12,
+  },
+  welcomeSection: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 20,
+  },
+  welcomeTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  welcomeSubtitle: {
+    fontSize: 16,
   },
 });

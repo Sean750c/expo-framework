@@ -115,20 +115,15 @@ const RatesContent: React.FC = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <View>
-            <Text style={[styles.title, { color: theme.colors.text }]}>Live Rates</Text>
-            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-              Get the best rates for your gift cards
-            </Text>
-          </View>
+      <AppHeader 
+        title="Live Rates"
+        rightComponent={
           <View style={[styles.liveIndicator, { backgroundColor: theme.colors.success }]}>
             <View style={styles.liveDot} />
             <Text style={[styles.liveText, { color: theme.colors.success }]}>LIVE</Text>
           </View>
-        </View>
-      </View>
+        }
+      />
       
       <ScrollView 
         style={styles.scrollView} 
@@ -395,23 +390,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  header: {
-    padding: 20,
-    paddingTop: 10,
-  },
-  headerTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
   },
   liveIndicator: {
     flexDirection: 'row',

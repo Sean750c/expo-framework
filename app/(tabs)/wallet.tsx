@@ -61,8 +61,7 @@ const WalletContent: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader 
-        title="My Wallet"
-        subtitle="Manage your funds and transactions"
+        title="Wallet"
         rightComponent={
           <TouchableOpacity
             onPress={() => setShowBalance(!showBalance)}
@@ -276,6 +275,20 @@ const WalletContent: React.FC = () => {
             </View>
           )}
         </SlideUpView>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default function Wallet() {
+  return (
+    <AuthGuard>
+      <WalletContent />
+    </AuthGuard>
+  );
+}
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },

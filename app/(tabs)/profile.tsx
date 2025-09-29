@@ -130,7 +130,6 @@ const ProfileContent: React.FC = () => {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader 
         title="Profile"
-        subtitle="Manage your account and preferences"
       />
       <ScrollView style={styles.scrollView}>
         {/* Profile Header */}

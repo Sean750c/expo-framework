@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
 import { useGiftCardStore } from '@/src/store/giftCardStore';
@@ -9,18 +9,36 @@ import { EmptyState } from '@/src/components/common/EmptyState';
 import { AppHeader } from '@/src/components/common/AppHeader';
 import { AnimatedView, SlideUpView } from '@/src/components/common/AnimatedView';
 import { GiftCardSubmission } from '@/src/types/giftcard';
-import { Clock, CheckCircle, XCircle, DollarSign, CreditCard } from 'lucide-react-native';
+import { Clock, CheckCircle, XCircle, DollarSign, CreditCard, Search, Filter } from 'lucide-react-native';
 
 const OrdersContent: React.FC = () => {
   const { theme } = useTheme();
   const { user } = useAuthStore();
   const { submissions, loading, error, fetchSubmissions } = useGiftCardStore();
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [statusFilter, setStatusFilter] = React.useState<'all' | GiftCardSubmission['status']>('all');
 
   useEffect(() => {
     if (user?.id) {
       fetchSubmissions(user.id);
     }
   }, [user?.id, fetchSubmissions]);
+
+  const filteredSubmissions = submissions.filter(submission => {
+    const matchesSearch = submission.giftCardName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         submission.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || submission.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const statusOptions: Array<{ label: string; value: 'all' | GiftCardSubmission['status'] }> = [
+    { label: 'All', value: 'all' },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Processing', value: 'processing' },
+    { label: 'Approved', value: 'approved' },
+    { label: 'Rejected', value: 'rejected' },
+    { label: 'Paid', value: 'paid' },
+  ];
 
   const getStatusIcon = (status: GiftCardSubmission['status']) => {
     const iconProps = { size: 20 };
@@ -92,6 +110,9 @@ const OrdersContent: React.FC = () => {
 
   if (submissions.length === 0) {
     return (
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <AppHeader title="My Orders" />
+        <ScrollView style={styles.scrollView}>
       <EmptyState
         title="No Orders Yet"
         description="You haven't submitted any gift cards for recycling yet."
@@ -99,23 +120,73 @@ const OrdersContent: React.FC = () => {
         onAction={() => {/* Navigate to sell card */}}
         icon={<CreditCard size={48} color={theme.colors.textSecondary} />}
       />
+        </ScrollView>
+      </View>
     );
   }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <AppHeader 
-        title="My Orders"
-        subtitle="Track your gift card transactions"
-      />
+      <AppHeader title="My Orders" />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {/* Search and Filter */}
+        <AnimatedView animation="slideUp" delay={100} style={styles.filterContainer}>
+          <View style={[styles.searchBar, { backgroundColor: theme.colors.surface }]}>
+            <Search size={20} color={theme.colors.textSecondary} />
+            <TextInput
+              style={[styles.searchInput, { color: theme.colors.text }]}
+              placeholder="Search orders..."
+              placeholderTextColor={theme.colors.textSecondary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </View>
+          
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.statusFilters}>
+            {statusOptions.map((option) => (
+              <TouchableOpacity
+                key={option.value}
+                style={[
+                  styles.statusChip,
+                  {
+                    backgroundColor: statusFilter === option.value 
+                      ? theme.colors.primary 
+                      : theme.colors.surface
+                  }
+                ]}
+                onPress={() => setStatusFilter(option.value)}
+              >
+                <Text
+                  style={[
+                    styles.statusChipText,
+                    {
+                      color: statusFilter === option.value 
+                        ? '#FFFFFF' 
+                        : theme.colors.text
+                    }
+                  ]}
+                >
+                  {option.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </AnimatedView>
+
         {/* Orders List */}
-        <SlideUpView delay={100} style={styles.ordersContainer}>
-          {submissions.map((submission) => (
+        <SlideUpView delay={200} style={styles.ordersContainer}>
+          {filteredSubmissions.length === 0 ? (
+            <View style={[styles.emptyState, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.emptyText, { color: theme.colors.textSecondary }]}>
+                No orders match your search criteria
+              </Text>
+            </View>
+          ) : (
+            filteredSubmissions.map((submission) => (
             <AnimatedView
               key={submission.id}
               animation="slideUp"
-              delay={200 + submissions.indexOf(submission) * 100}
+              delay={300 + filteredSubmissions.indexOf(submission) * 100}
             >
               <TouchableOpacity
                 style={[styles.orderCard, { backgroundColor: theme.colors.surface }]}
@@ -191,6 +262,7 @@ const OrdersContent: React.FC = () => {
               </TouchableOpacity>
             </AnimatedView>
           ))}
+          )}
         </SlideUpView>
       </ScrollView>
     </View>
@@ -212,10 +284,48 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
+  filterContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    gap: 12,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    gap: 12,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+  },
+  statusFilters: {
+    flexDirection: 'row',
+  },
+  statusChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  statusChipText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
   ordersContainer: {
     paddingHorizontal: 20,
     paddingBottom: 24,
     gap: 12,
+  },
+  emptyState: {
+    padding: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 14,
   },
   orderCard: {
     borderRadius: 12,
