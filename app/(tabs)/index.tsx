@@ -262,6 +262,21 @@ const HomeContent: React.FC = () => {
             onPress={() => router.push('/sell-card' as any)}
             size="large"
             style={styles.ctaButton}
+          />
+        </AnimatedView>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default function Home() {
+  return (
+    <AuthGuard>
+      <HomeContent />
+    </AuthGuard>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
