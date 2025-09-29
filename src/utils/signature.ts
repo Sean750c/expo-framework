@@ -56,17 +56,17 @@ export class SignatureUtils {
         if (storedId) {
           return storedId;
         }
-        
+
         const newId = this.generateFallbackDeviceId();
         localStorage.setItem('device_id', newId);
         return newId;
       }
 
       // For mobile platforms, try to get a unique identifier
-      const deviceId = Device.osInternalBuildId || 
-                      Device.osBuildId || 
-                      this.generateFallbackDeviceId();
-      
+      const deviceId = Device.osInternalBuildId ||
+        Device.osBuildId ||
+        this.generateFallbackDeviceId();
+
       return deviceId;
     } catch (error) {
       return this.generateFallbackDeviceId();
@@ -77,7 +77,7 @@ export class SignatureUtils {
    * Generate fallback device ID
    */
   private static generateFallbackDeviceId(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = Math.random() * 16 | 0;
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
@@ -129,8 +129,12 @@ export class SignatureUtils {
     };
 
     // Sort parameters by key and create query string
-    const sortedKeys = Object.keys(allParams).sort();
-    const queryString = sortedKeys
+    // const sortedKeys = Object.keys(allParams).sort();
+    // const queryString = sortedKeys
+    //   .map(key => `${key}=${allParams[key]}`)
+    //   .join('&');
+
+    const queryString = Object.keys(allParams)
       .map(key => `${key}=${allParams[key]}`)
       .join('&');
 
@@ -138,17 +142,17 @@ export class SignatureUtils {
     const signatureString = queryString + appConfig.APP_KEY;
 
     // 生成 MD5
-  let signature: string;
-  if (Platform.OS === "web") {
-    // Web 端用 crypto-js
-    signature = MD5(signatureString).toString();
-  } else {
-    // RN 原生端用 expo-crypto
-    signature = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.MD5,
-      signatureString
-    );
-  }
+    let signature: string;
+    if (Platform.OS === "web") {
+      // Web 端用 crypto-js
+      signature = MD5(signatureString).toString();
+    } else {
+      // RN 原生端用 expo-crypto
+      signature = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.MD5,
+        signatureString
+      );
+    }
 
     return signature.toLowerCase();
   }

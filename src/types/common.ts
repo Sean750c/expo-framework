@@ -1,3 +1,5 @@
+import type { ApiResponse } from './api';
+
 // Extend AxiosRequestConfig to include retry flag
 declare module 'axios' {
     interface AxiosRequestConfig {
@@ -48,7 +50,7 @@ export interface DeviceInfo {
     device_type: string;
 }
 
-export interface AppInitResponse {
+export interface InitData {
     fqa_url: string;
     vip_url: string;
     share_link: string;
@@ -90,3 +92,5 @@ export interface AppInitResponse {
     platform_fee: string;
     recommend_fee: string;
 }
+
+export type InitResponse = ApiResponse<InitData>;

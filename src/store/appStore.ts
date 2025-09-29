@@ -2,17 +2,17 @@ import { create } from 'zustand';
 import { AppState } from '@/src/types';
 import { storage } from '@/src/utils/storage';
 import { AppService } from '@/src/api/appService';
-import { AppInitResponse } from '@/src/types';
+import { InitData } from '@/src/types';
 import { logger } from '@/src/utils/logger';
 import { STORAGE_KEYS } from '@/src/constants';
 
 interface AppStore extends AppState {
-  appConfig: AppInitResponse | null;
+  appConfig: InitData | null;
   setTheme: (theme: 'light' | 'dark') => Promise<void>;
   setOnlineStatus: (isOnline: boolean) => void;
   setAppState: (appState: 'active' | 'background' | 'inactive') => void;
   initializeApp: () => Promise<void>;
-  setAppConfig: (config: AppInitResponse) => void;
+  setAppConfig: (config: InitData) => void;
 }
 
 export const useAppStore = create<AppStore>((set, get) => ({
@@ -38,7 +38,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     set({ appState });
   },
 
-  setAppConfig: (config: AppInitResponse) => {
+  setAppConfig: (config: InitData) => {
     set({ appConfig: config });
   },
 

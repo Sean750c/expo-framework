@@ -15,7 +15,7 @@ const developmentConfig: AppConfig = {
   API_BASE_URL: 'https://test-giftcard8-api.gcard8.com',
   APP_ID: 'android-cardking-v1',
   APP_VERSION: '1.0.0',
-  APP_KEY: 'your_app_key_here', // Replace with actual app key
+  APP_KEY: 'kxI2tTK5iQNMzAOYiZDh0XdD3OmgPSnK', // Replace with actual app key
   ENVIRONMENT: 'development',
   ENABLE_LOGGING: true,
   ENABLE_REMOTE_LOGGING: false,

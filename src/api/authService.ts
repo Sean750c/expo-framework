@@ -18,7 +18,7 @@ export class AuthService {
       );
 
       logger.info('User register successfully');
-      return response;
+      return response.data;
     } catch (error) {
       logger.error('User register failed:', error);
       throw error;
@@ -37,9 +37,8 @@ export class AuthService {
         '/gc/user/applogin',
         signedParams
       );
-
       logger.info('User login successfully');
-      return response;
+      return response.data;
     } catch (error) {
       logger.error('User login failed:', error);
       throw error;

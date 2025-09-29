@@ -78,17 +78,17 @@ class ApiClient {
   }
 
   // ---------- 封装方法 ----------
-  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse> {
     const response = await this.client.get<ApiResponse<T>>(url, config);
     
     if (!response.data.success) {
       throw new Error(response.data.msg || 'API request failed');
     }
     
-    return response.data.data;
+    return response.data;
   }
 
-  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse> {
     const response = await this.client.post<ApiResponse<T>>(
       url,
       qs.stringify(data), // form-urlencoded
@@ -105,10 +105,10 @@ class ApiClient {
       throw new Error(response.data.msg || 'API request failed');
     }
     
-    return response.data.data;
+    return response.data;
   }
 
-  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse> {
     const response = await this.client.put<ApiResponse<T>>(
       url,
       qs.stringify(data),
@@ -125,10 +125,10 @@ class ApiClient {
       throw new Error(response.data.msg || 'API request failed');
     }
     
-    return response.data.data;
+    return response.data;
   }
 
-  async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse> {
     const response = await this.client.patch<ApiResponse<T>>(
       url,
       qs.stringify(data),
@@ -145,10 +145,10 @@ class ApiClient {
       throw new Error(response.data.msg || 'API request failed');
     }
     
-    return response.data.data;
+    return response.data;
   }
 
-  async delete<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async delete<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse> {
     const response = await this.client.delete<ApiResponse<T>>(
       url,
       {
@@ -165,7 +165,7 @@ class ApiClient {
       throw new Error(response.data.msg || 'API request failed');
     }
     
-    return response.data.data;
+    return response.data;
   }
 
   // ---------- Raw methods (保留 JSON 灵活用) ----------

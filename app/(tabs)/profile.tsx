@@ -82,9 +82,6 @@ const ProfileContent: React.FC = () => {
             {user?.email}
           </Text>
           
-          <Text style={[styles.role, { color: theme.colors.accent }]}>
-            {user?.role.toUpperCase()}
-          </Text>
         </View>
 
         {/* Profile Info */}
@@ -117,7 +114,7 @@ const ProfileContent: React.FC = () => {
                 User ID
               </Text>
               <Text style={[styles.infoValue, { color: theme.colors.text }]}>
-                {user?.id.slice(0, 8)}...
+                {user?.id}...
               </Text>
             </View>
           </View>
