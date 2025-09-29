@@ -132,69 +132,55 @@ const ProfileContent: React.FC = () => {
         title="Profile"
       />
       <ScrollView style={styles.scrollView}>
-        {/* Profile Header */}
-        <SlideUpView delay={100} style={styles.header}>
-          <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primary }]}>
-            <User size={40} color="#FFFFFF" />
+        {/* Profile Header - Compact */}
+        <SlideUpView delay={100} style={styles.profileHeader}>
+          <View style={styles.profileInfo}>
+            <View style={[styles.avatar, { backgroundColor: theme.colors.primary }]}>
+              <User size={24} color="#FFFFFF" />
+            </View>
+            <View style={styles.userDetails}>
+              <Text style={[styles.userName, { color: theme.colors.text }]}>
+                {user?.name}
+              </Text>
+              <Text style={[styles.userEmail, { color: theme.colors.textSecondary }]}>
+                {user?.email}
+              </Text>
+            </View>
           </View>
-          
-          <Text style={[styles.name, { color: theme.colors.text }]}>
-            {user?.name}
-          </Text>
-          
-          <Text style={[styles.email, { color: theme.colors.textSecondary }]}>
-            {user?.email}
-          </Text>
-          
-          <Button
-            title="Edit Profile"
+          <TouchableOpacity
+            style={[styles.editIconButton, { backgroundColor: theme.colors.surface }]}
             onPress={handleEditProfile}
-            variant="outline"
-            size="small"
-            style={styles.editButton}
-          />
+          >
+            <Edit3 size={16} color={theme.colors.primary} />
+          </TouchableOpacity>
         </SlideUpView>
 
-        {/* Profile Info */}
-        <AnimatedView animation="slideUp" delay={200} style={styles.infoSection}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
-            Profile Information
-          </Text>
-          
-          <View style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}>
-            <View style={styles.infoRow}>
-              <Text style={[styles.infoLabel, { color: theme.colors.textSecondary }]}>
-                Member Since
+        {/* Quick Stats */}
+        <AnimatedView animation="slideUp" delay={200} style={styles.statsSection}>
+          <View style={styles.statsGrid}>
+            <View style={[styles.statItem, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.statValue, { color: theme.colors.text }]}>
+                {user?.createdAt ? Math.floor((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24)) : 0}
               </Text>
-              <Text style={[styles.infoValue, { color: theme.colors.text }]}>
-                {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+              <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
+                Days Active
               </Text>
             </View>
-            
-            <View style={styles.infoRow}>
-              <Text style={[styles.infoLabel, { color: theme.colors.textSecondary }]}>
-                Last Updated
+            <View style={[styles.statItem, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.statValue, { color: theme.colors.text }]}>
+                {user?.role === 'premium' ? 'Premium' : 'Standard'}
               </Text>
-              <Text style={[styles.infoValue, { color: theme.colors.text }]}>
-                {user?.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : 'N/A'}
-              </Text>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <Text style={[styles.infoLabel, { color: theme.colors.textSecondary }]}>
-                User ID
-              </Text>
-              <Text style={[styles.infoValue, { color: theme.colors.text }]}>
-                {user?.id}...
+              <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
+                Account Type
               </Text>
             </View>
           </View>
         </AnimatedView>
 
         {/* Settings Section */}
-        <SlideUpView delay={300} style={styles.settingsSection}>
+        <SlideUpView delay={300} style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
-            Settings
+            Preferences
           </Text>
           
           {/* Appearance */}
@@ -234,37 +220,56 @@ const ProfileContent: React.FC = () => {
           />
         </SlideUpView>
 
-        {/* System Info */}
-        <AnimatedView animation="slideUp" delay={400} style={styles.systemSection}>
+        {/* Account Section */}
+        <AnimatedView animation="slideUp" delay={400} style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
-            System Information
+            Account
+          </Text>
+          
+          {/* Profile Information */}
+          <View style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}>
+            <View style={styles.infoRow}>
+              <Text style={[styles.infoLabel, { color: theme.colors.textSecondary }]}>
+                Member Since
+              </Text>
+              <Text style={[styles.infoValue, { color: theme.colors.text }]}>
+                {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+              </Text>
+            </View>
+            
+            <View style={styles.infoRow}>
+              <Text style={[styles.infoLabel, { color: theme.colors.textSecondary }]}>
+                User ID
+              </Text>
+              <Text style={[styles.infoValue, { color: theme.colors.text }]}>
+                {user?.id?.slice(-8).toUpperCase() || 'N/A'}
+              </Text>
+            </View>
+          </View>
+        </AnimatedView>
+
+        {/* System Info */}
+        <AnimatedView animation="slideUp" delay={500} style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+            System
           </Text>
           
           <SettingItem
             title="Network Status"
-            description={isOnline ? "Connected to internet" : "No internet connection"}
+            description={isOnline ? "Connected" : "Offline"}
             icon={isOnline ? 
               <Wifi size={20} color={theme.colors.success} /> : 
               <WifiOff size={20} color={theme.colors.error} />
             }
           />
           
-          <View style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}>
+          <View style={[styles.systemCard, { backgroundColor: theme.colors.surface }]}>
             <View style={styles.infoRow}>
               <Text style={[styles.infoLabel, { color: theme.colors.textSecondary }]}>
                 Version
               </Text>
               <Text style={[styles.infoValue, { color: theme.colors.text }]}>
                 1.0.0
-              </Text>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <Text style={[styles.infoLabel, { color: theme.colors.textSecondary }]}>
-                Build
-              </Text>
-              <Text style={[styles.infoValue, { color: theme.colors.text }]}>
-                1 (Debug)
               </Text>
             </View>
             
@@ -280,7 +285,7 @@ const ProfileContent: React.FC = () => {
         </AnimatedView>
 
         {/* Logout */}
-        <AnimatedView animation="bounce" delay={500} style={styles.logoutSection}>
+        <AnimatedView animation="bounce" delay={600} style={styles.logoutSection}>
           <TouchableOpacity
             style={[styles.logoutButton, { backgroundColor: theme.colors.error + '20' }]}
             onPress={handleLogout}
@@ -364,66 +369,97 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  header: {
+  profileHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 24,
-    paddingTop: 40,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
-  avatarContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+  profileInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginRight: 12,
   },
-  name: {
-    fontSize: 24,
-    fontWeight: '700',
+  userDetails: {
+    flex: 1,
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  userEmail: {
+    fontSize: 14,
+  },
+  editIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statsSection: {
+    paddingHorizontal: 20,
+    marginBottom: 24,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  statItem: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 16,
+    fontWeight: '600',
     marginBottom: 4,
   },
-  email: {
-    fontSize: 16,
-    marginBottom: 8,
+  statLabel: {
+    fontSize: 12,
+    textAlign: 'center',
   },
-  editButton: {
-    marginTop: 12,
-    alignSelf: 'center',
-    minWidth: 120,
-  },
-  infoSection: {
+  section: {
     paddingHorizontal: 20,
     marginBottom: 24,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   infoCard: {
     borderRadius: 12,
     padding: 16,
   },
+  systemCard: {
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 8,
+  },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: 6,
   },
   infoLabel: {
     fontSize: 14,
-    fontWeight: '500',
   },
   infoValue: {
     fontSize: 14,
-  },
-  settingsSection: {
-    paddingHorizontal: 20,
-    paddingBottom: 24,
-  },
-  systemSection: {
-    paddingHorizontal: 20,
-    marginBottom: 12,
+    fontWeight: '500',
   },
   settingItem: {
     flexDirection: 'row',
