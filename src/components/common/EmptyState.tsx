@@ -60,7 +60,6 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   }
 
   return content;
-  );
 };
 
 const styles = StyleSheet.create({
