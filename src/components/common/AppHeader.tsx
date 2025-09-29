@@ -66,12 +66,12 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           {/* Center Section */}
           <View style={styles.centerSection}>
             {title && (
-              <Text style={[styles.title, { color: textColor }]} numberOfLines={1}>
+              <Text style={[styles.title, { color: textColor, textAlign: 'left' }]} numberOfLines={1}>
                 {title}
               </Text>
             )}
             {subtitle && (
-              <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]} numberOfLines={1}>
+              <Text style={[styles.subtitle, { color: theme.colors.textSecondary, textAlign: 'left' }]} numberOfLines={1}>
                 {subtitle}
               </Text>
             )}
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   centerSection: {
     flex: 2,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   rightSection: {
     flex: 1,
@@ -134,12 +134,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   subtitle: {
     fontSize: 12,
     marginTop: 2,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   notificationButton: {
     padding: 8,

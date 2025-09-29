@@ -116,13 +116,7 @@ const RatesContent: React.FC = () => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader 
-        title="Live Rates"
-        rightComponent={
-          <View style={[styles.liveIndicator, { backgroundColor: theme.colors.success }]}>
-            <View style={styles.liveDot} />
-            <Text style={[styles.liveText, { color: theme.colors.success }]}>LIVE</Text>
-          </View>
-        }
+        title="Rates"
       />
       
       <ScrollView 
