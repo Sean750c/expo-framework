@@ -114,7 +114,7 @@ const RatesContent: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader 
         title="Rates"
       />
@@ -366,7 +366,7 @@ const RatesContent: React.FC = () => {
           />
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

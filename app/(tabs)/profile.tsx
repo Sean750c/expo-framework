@@ -25,6 +25,7 @@ import {
   LogOut,
   Edit3
 } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 
 interface ProfileFormData {
   name: string;
@@ -37,6 +38,7 @@ const ProfileContent: React.FC = () => {
   const { appState, isOnline, setOnlineStatus } = useAppStore();
   const { user, updateProfile, logout, isLoading } = useAuthStore();
   const [showEditModal, setShowEditModal] = useState(false);
+  const router = useRouter();
 
   const {
     control,
