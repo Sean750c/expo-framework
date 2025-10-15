@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/hooks/useTheme';
 import { useAuthStore } from '@/src/store/authStore';
+import { useGoogleAuth } from '@/src/hooks/useGoogleAuth';
 import { Button } from '@/src/components/common/Button';
 import { Input } from '@/src/components/common/Input';
 import { AppHeader } from '@/src/components/common/AppHeader';
@@ -22,6 +23,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const { login, isLoading } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
+  const { signInWithCode, signInWithIdToken } = useGoogleAuth();
 
   const {
     control,
@@ -108,10 +110,36 @@ export default function LoginScreen() {
               style={styles.loginButton}
             />
           </AnimatedView>
+
+          <AnimatedView animation="fade" delay={550} style={styles.divider}>
+            <View style={[styles.dividerLine, { backgroundColor: theme.colors.border }]} />
+            <Text style={[styles.dividerText, { color: theme.colors.textSecondary }]}>
+              OR
+            </Text>
+            <View style={[styles.dividerLine, { backgroundColor: theme.colors.border }]} />
+          </AnimatedView>
+
+          <AnimatedView animation="slideUp" delay={600}>
+            <Button
+              title="Sign in with Google (Code)"
+              onPress={signInWithCode}
+              variant="outline"
+              style={styles.googleButton}
+            />
+          </AnimatedView>
+
+          <AnimatedView animation="slideUp" delay={650}>
+            <Button
+              title="Sign in with Google (ID Token)"
+              onPress={signInWithIdToken}
+              variant="outline"
+              style={styles.googleButton}
+            />
+          </AnimatedView>
         </SlideUpView>
 
         {/* Footer */}
-        <AnimatedView animation="fade" delay={600} style={styles.footer}>
+        <AnimatedView animation="fade" delay={700} style={styles.footer}>
           <Text style={[styles.footerText, { color: theme.colors.textSecondary }]}>
             Don't have an account?{' '}
           </Text>
@@ -152,6 +180,23 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 24,
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 24,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+  dividerText: {
+    marginHorizontal: 16,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  googleButton: {
+    marginBottom: 12,
   },
   footer: {
     flexDirection: 'row',
