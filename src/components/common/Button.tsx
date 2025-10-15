@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
+  Pressable,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '@/src/hooks/useTheme';
@@ -103,19 +104,20 @@ export const Button: React.FC<ButtonProps> = ({
   }
 
   return (
-    <Animated.View style={[buttonStyles, animatedStyle]}>
-      <Animated.View
-        onTouchStart={handlePressIn}
-        onTouchEnd={handlePressOut}
-        onPress={handlePress}
-        style={StyleSheet.absoluteFillObject}
-      />
-      {loading ? (
-        <ActivityIndicator color={getTextColor()} />
-      ) : (
-        <Text style={textStyles}>{title}</Text>
-      )}
-    </Animated.View>
+    <Pressable
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      onPress={handlePress}
+      disabled={disabled || loading}
+    >
+      <Animated.View style={[buttonStyles, animatedStyle]}>
+        {loading ? (
+          <ActivityIndicator color={getTextColor()} />
+        ) : (
+          <Text style={textStyles}>{title}</Text>
+        )}
+      </Animated.View>
+    </Pressable>
   );
 };
 
