@@ -64,4 +64,24 @@ export class AuthService {
       throw error;
     }
   }
+
+  static async getGoogleInfoByToken(code: string, redirectUri: string): Promise<User> {
+    try {
+      logger.info('Get google info...');
+
+      // Prepare request parameters with signature
+      const signedParams = await SignatureUtils.prepareRequestParams({ code, redirectUri });
+
+      // Make API request
+      const response = await apiClient.post<AuthResponse>(
+        '/gc/social/getGoogleInfoByToken',
+        signedParams
+      );
+      logger.info('Get google info successfully');
+      return response.data;
+    } catch (error) {
+      logger.error('Get google info failed:', error);
+      throw error;
+    }
+  }
 }
