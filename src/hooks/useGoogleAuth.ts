@@ -83,7 +83,6 @@ export const useGoogleAuth = () => {
   const signInWithCode = async () => {
     try {
       const result = await promptAsync({
-        useProxy: Platform.OS === 'web' ? false : true,
         showInRecents: true,
       });
 
@@ -100,7 +99,6 @@ export const useGoogleAuth = () => {
   const signInWithIdToken = async () => {
     try {
       const result = await promptIdTokenAsync({
-        useProxy: Platform.OS === 'web' ? false : true,
         showInRecents: true,
       });
 
