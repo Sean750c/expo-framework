@@ -41,6 +41,7 @@ export const useGoogleAuth = () => {
       }),
       scopes: ['openid', 'profile', 'email'],
       responseType: AuthSession.ResponseType.IdToken,
+      usePKCE: false, // 显式关闭
     },
     discovery
   );
